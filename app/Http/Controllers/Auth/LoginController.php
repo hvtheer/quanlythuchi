@@ -26,10 +26,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected function authenticated()
-    {
-        return redirect('admin/dashboard')->with('message','Welcome to Dashboard!');
-    }
+    protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
