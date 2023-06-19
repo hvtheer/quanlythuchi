@@ -46,7 +46,12 @@ class HouseholdController extends Controller
         ]);
 
             foreach($request->members as $key => $member) {
-                $household->householdMembers()->create($key);
+                $household->householdMembers()->create([
+                    'householdId' => $household->id,
+                    'personId' => $request->members[$key]['personId'],
+                    'relationship' => $request->members[$key]['relationship'],
+                    'isOwner' => $request->members[$key]['isOwner'] ? '1':'0',
+                ]);
             }
 
         $household->save();
