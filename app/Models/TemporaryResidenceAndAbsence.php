@@ -12,11 +12,27 @@ class TemporaryResidenceAndAbsence extends Model
     protected $table = 'temporary_residence_and_absence';
 
     protected $fillable = [
+        'userId',
         'personId',
         'householdId',
         'startDate',
         'endDate',
         'reason',
-        'tempAbsenceAddress'
+        'type',
+        'beforeAddress'
     ];
+
+    public static function getAllTemporaryResidenceAndAbsence(){
+        return  TemporaryResidenceAndAbsence::orderBy('id','DESC')->paginate(10);
+    }
+
+    public function person()
+    {
+        return $this->belongsTo(Person::class, 'personId', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'userId', 'id');
+    }
 }

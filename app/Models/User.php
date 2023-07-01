@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'personId',
+        'status'
     ];
 
     /**
@@ -43,4 +44,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function person()
+    {
+        return $this->belongsTo(Person::class,'personId', 'id');
+    }
+    public static function getAllUsers(){
+        return  User::orderBy('id','DESC')->paginate();
+    }
 }

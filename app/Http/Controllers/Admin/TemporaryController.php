@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Person;
+use App\Models\Household;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\TemporaryFormRequest;
 use App\Models\TemporaryResidenceAndAbsence;
 
@@ -12,77 +14,73 @@ class TemporaryController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request['search'] ?? "";
-        if ($search != "") {
-            $temps = TemporaryResidenceAndAbsence::where('personId','LIKE',"%$search%")->orWhere('householdId','LIKE',"%$search%")->get();
-        } else {
-            $temps = TemporaryResidenceAndAbsence::all();
-        }
-        return view('admin.temporary.index', compact('temps','search'));
+        $temporaries = TemporaryResidenceAndAbsence::getAllTemporaryResidenceAndAbsence();
+        return view('admin.temporary.index', compact('temporaries'));
     }
 
-    public function show($temp)
+    public function show($temporary)
     {
-        if (!$temp = TemporaryResidenceAndAbsence::findOrFail($temp)) {
+        if (!$temporary = TemporaryResidenceAndAbsence::findOrFail($temporary)) {
             abort(404);
         }
 
-        return view('admin.temporary.show', compact('temp'));
+        return view('admin.temporary.show', compact('temporary'));
     }
 
     public function create()
     {
-        return view('admin.temporary.create');
+        $people = Person::all();
+        return view('admin.temporary.create', compact('people'));
     }
 
     public function store(TemporaryFormRequest $request)
     {
         $validatedData = $request->validated();
-
-        $temp = new TemporaryResidenceAndAbsence;
-        $temp->personId = $validatedData['personId'];
-        $temp->householdId = $validatedData['householdId'];
-        $temp->startDate = $validatedData['startDate'];
-        $temp->endDate = $validatedData['endDate'];
-        $temp->reason = $validatedData['reason'];
-        $temp->tempAbsenceAddress = $validatedData['tempAbsenceAddress'];
-        $temp->save();
-
-        return redirect('admin/temporary')->with('message','This temporary residence or absence was added successfully');
+        $validatedData['userId'] = Auth::user()->id;
+        $temporary = TemporaryResidenceAndAbsence::create($validatedData);
+    
+        return redirect('admin/temporary')->with('success', 'TemporaryResidenceAndAbsence was added successfully');
     }
 
-    public function edit($temp)
+    public function edit($temporary)
     {
-        if (!$temp = TemporaryResidenceAndAbsence::findOrFail($temp)) {
+        if (!$temporary = TemporaryResidenceAndAbsence::findOrFail($temporary)) {
             abort(404);
         }
-        return view('admin.temporary.edit', compact('temp'));
+        return view('admin.temporary.edit', compact('temporary'));
     }
     
-    public function update($temp, TemporaryFormRequest $request)
+    public function update($temporary, TemporaryFormRequest $request)
     {
         $validatedData = $request->validated();
-        if (!$temp = TemporaryResidenceAndAbsence::findOrFail($temp)) {
-            abort(404);
-        }
-        $temp->personId = $validatedData['personId'];
-        $temp->householdId = $validatedData['householdId'];
-        $temp->startDate = $validatedData['startDate'];
-        $temp->endDate = $validatedData['endDate'];
-        $temp->reason = $validatedData['reason'];
-        $temp->tempAbsenceAddress = $validatedData['tempAbsenceAddress'];
-        $temp->update();
-
-        return redirect('admin/temporary')->with('message','This temporary residence or absence was updated successfully');
+        $temporary = TemporaryResidenceAndAbsence::findOrFail($temporary);
+    
+        $temporary->fill($validatedData);
+        $validatedData['userId'] = Auth::user()->id;
+    
+        $temporary->update();
+    
+        return redirect('admin/temporary')->with('success', 'TemporaryResidenceAndAbsence was updated successfully');
     }
+    
 
-    public function destroy($temp)
+    public function destroy($temporary)
     {
-        if (!$temp = TemporaryResidenceAndAbsence::findOrFail($temp)) {
+        if (!$temporary = TemporaryResidenceAndAbsence::findOrFail($temporary)) {
             abort(404);
         }
-        $temp->delete();
+        $temporary->delete();
 
-        return redirect()->back()->with('message','This temporary residence or absence was deleted successfully');
+        return redirect()->back()->with('success','This temporary was deleted successfully');
     }
+
+    public function getHouseholdId(Request $request)
+    {
+        $personId = $request->input('personId');
+    
+        // Fetch the householdId based on the personId
+        $householdId = Person::find($personId)->household->householdId;
+    
+        return response()->json(['householdId' => $householdId]);
+    }    
 }

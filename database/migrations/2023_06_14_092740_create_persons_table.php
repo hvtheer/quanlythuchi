@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('lastName');
             $table->date('dateOfBirth');
             $table->string('avatar')->nullable();
-            $table->tinyInteger('gender')->comment('0:MALE;1:FEMALE');
+            $table->enum('gender', ['male', 'female']);
             $table->string('email')->nullable();
             $table->string('numberPhone')->nullable();
             $table->string('ethnic');
@@ -26,8 +26,8 @@ return new class extends Migration
             $table->string('address');
             $table->string('occupation')->nullable();
             $table->string('educationLevel')->nullable();
-            $table->tinyInteger('maritalStatus')->comment('0:SINGLE;1:MARRIED');
-            $table->tinyInteger('status')->comment('0:ALIVE,1:DEAD');
+            $table->enum('maritalStatus', ['single', 'married']);
+            $table->enum('status', ['alive', 'dead'])->default('alive');
             $table->timestamps();
         });
     }

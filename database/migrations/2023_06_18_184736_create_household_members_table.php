@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('personId');
             $table->unsignedBigInteger('householdId');
             $table->string('relationship');
-            $table->tinyInteger('isOwner');
+            $table->boolean('isOwner');
             $table->timestamps();
 
             $table->foreign('personId')->references('id')->on('persons')->onDelete('cascade')->onUpdate('cascade');

@@ -14,15 +14,18 @@ return new class extends Migration
         Schema::create('temporary_residence_and_absence', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('personId');
-            $table->unsignedBigInteger('householdId');
+            $table->unsignedBigInteger('householdId')->nullable();
+            $table->unsignedBigInteger('userId');
             $table->date('startDate')->default(now());
             $table->date('endDate')->nullable();
             $table->string('reason');
-            $table->string('tempAbsenceAddress')->nullable();
+            $table->enum('type',['residence', 'absence']);
+            $table->string('beforeAddress')->nullable();
             $table->timestamps();
 
-            $table->foreign('personId')->references('id')->on('persons')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('householdId')->references('id')->on('households')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('userId')->references('id')->on('users')->onUpdate('cascade');
+            $table->foreign('personId')->references('id')->on('persons')->onUpdate('cascade');
+            $table->foreign('householdId')->references('id')->on('households');
         });
     }
 

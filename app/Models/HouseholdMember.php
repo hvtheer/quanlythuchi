@@ -18,4 +18,14 @@ class HouseholdMember extends Model
         'isOwner'
     ];
 
+    public function household()
+    {
+        return $this->belongsTo(Household::class, 'householdId', 'id');
+    }
+    
+    public function person()
+    {
+        return $this->belongsTo(Person::class, 'personId', 'id');
+    }
+    
 }

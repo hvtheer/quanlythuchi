@@ -29,8 +29,9 @@ class FeeFormRequest extends FormRequest
             'amount' => [
                 'nullable',
             ],
-            'isMandatory' => [
-                'nullable'
+            'type' => [
+                'required',
+                'in:mandatory,voluntary'
             ],
             'startDate' => [
                 'required',

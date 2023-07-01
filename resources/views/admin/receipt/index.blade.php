@@ -1,60 +1,138 @@
-@extends('layouts.admin')
+@extends('admin.layouts.master')
 
-@section('content')
-
-<div class="row">
-    <div class="col-md-12">
-        @if (session('message'))
-        <div class="alert alert-success">{{ session('message') }}</div>
-        @endif
-
-        <div class="card">
-            <div class="card-header">
-                <h3>Receipt
-                    <a href="{{ url('admin/receipt/create') }}" class="btn btn-primary btn-sm float-end">Add new</a>
-                </h3>
-            </div>
-            <div class="card-body">
-                <div class="col-md-12">
-                    <form action="" class="d-flex">
-                        <input class="form-control me-1" type="search" name="search" placeholder="Search" value="{{ $search }}">
-                        <button class="btn btn-primary" type="submit">Search</button>
+@section('main-content')
+ <!-- DataTales Example -->
+ <div class="card shadow mb-4">
+     <div class="row">
+         <div class="col-md-12">
+            @include('admin.layouts.notification')
+         </div>
+     </div>
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary float-left">Danh sách phiếu thu</h6>
+      <a href="{{url('admin/receipt/create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i>Thêm phiếu thu</a>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        @if(count($receipts)>0)
+        <table class="table table-bordered" id="banner-dataTable" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Người nộp</th>
+              <th>Khoản thu</th>
+              <th>Người thu</th>
+              <th>Số tiền</th>
+              <th>Ghi chú</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <th>ID</th>
+              <th>Người nộp</th>
+              <th>Khoản thu</th>
+              <th>Người thu</th>
+              <th>Số tiền</th>
+              <th>Ghi chú</th>
+              <th>Hành động</th>
+            </tr>
+          </tfoot>
+          <tbody>
+            @foreach($receipts as $receipt)   
+                <tr>
+                  <td>{{$receipt->id}}</td>
+                  <td>{{$receipt->person->name}}</td>
+                  <td>{{$receipt->fee->name}}</td>
+                  <td>{{$receipt->user->name}}</td>
+                  <td>{{$receipt->amount}}</td>
+                  <td>{{$receipt->note}}</td>
+                  <td>
+                    <a href="{{url('admin/receipt/'.$receipt->id.'/edit')}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
+                    <a href="{{url('admin/receipt/'.$receipt->id.'/show')}}" class="btn btn-warning btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="view" data-placement="bottom"><i class="fas fa-eye"></i></a>
+                    <form method="POST" action="{{url('admin/receipt/'.$receipt->id.'/delete')}}">
+                      @csrf 
+                      @method('delete')
+                      <button class="btn btn-danger btn-sm dltBtn" data-id={{$receipt->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>
                     </form>
-                </div>
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Person's ID</th>
-                            <th>Fee's ID</th>
-                            <th>Amount</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($receipts as $receipt)
-                            <td>{{ $receipt->id }}</td>
-                            <td>{{ $receipt->personId }}</td>
-                            <td>{{ $receipt->feeId }}</td>
-                            <td> {{ $receipt->amount }} </td>
-                            <td>
-                                <a href="{{ url('admin/receipt/'.$receipt->id.'/edit') }}"
-                                    class="btn btn-success">Edit</a>
-                                <a class="btn btn-primary" href="{{ url('admin/receipt/'.$receipt->id.'/show') }}">Info</a>
-                                <a href="{{ url('admin/receipt/'.$receipt->id.'/delete') }}"
-                                    onclick="return confirm('Are you sure, you want to delete this data?')"
-                                    class="btn btn-danger">Delete</a>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                {{-- <div class="pagination">
-                    {{ $receipts->links() }}
-                </div> --}}
-            </div>
-        </div>
+                </td>
+                  </td>
+                </tr>  
+            @endforeach
+          </tbody>
+        </table>
+        <span style="float:right">{{$receipts->links()}}</span>
+        @else
+          <h6 class="text-center">Không tìm thấy phiếu thu nào. Xin hãy thêm phiếu thu!</h6>
+        @endif
+      </div>
     </div>
 </div>
-
 @endsection
+
+@push('styles')
+  <link href="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+  <style>
+      div.dataTables_wrapper div.dataTables_paginate{
+          display: none;
+      }
+  </style>
+@endpush
+
+@push('scripts')
+
+  <!-- Page level plugins -->
+  <script src="{{asset('backend/vendor/datatables/jquery.dataTables.min.js')}}"></script>
+  <script src="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+
+  <!-- Page level custom scripts -->
+  <script src="{{asset('backend/js/demo/datatables-demo.js')}}"></script>
+  <script>
+      
+      $('#banner-dataTable').DataTable( {
+            "columnDefs":[
+                {
+                    "orderable":false,
+                    "targets":[]
+                }
+            ]
+        } );
+
+        // Sweet alert
+
+        function deleteData(id){
+            
+        }
+  </script>
+  <script>
+      $(document).ready(function(){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+          $('.dltBtn').click(function(e){
+            var form=$(this).closest('form');
+              var dataID=$(this).data('id');
+              // alert(dataID);
+              e.preventDefault();
+              swal({
+                    title: "Bạn có chắc không?",
+                    text: "Nếu bạn xoá, dữ liệu này sẽ không thể khôi phục lại!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                       form.submit();
+                    } else {
+                        swal("Dữ liệu của bạn đã an toàn!");
+                    }
+                });
+          })
+      })
+  </script>
+@endpush

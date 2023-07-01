@@ -12,11 +12,30 @@ class Receipt extends Model
     protected $table = 'receipts';
 
     protected $fillable = [
+        'userId',
         'householdId',
         'personId',
         'feeId',
-        'collecterId',
         'amount',
         'note'
     ];
+
+    public static function getAllReceipts(){
+        return  Receipt::orderBy('id','DESC')->paginate();
+    }
+
+    public function person()
+    {
+        return $this->belongsTo(Person::class, 'personId', 'id');
+    }
+
+    public function fee()
+    {
+        return $this->belongsTo(Fee::class, 'feeId', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'userId', 'id');
+    }
 }

@@ -1,59 +1,31 @@
-@extends('layouts.admin')
+@extends('admin.layouts.master')
 
-@section('content')
+@section('main-content')
 
-<div class="row">
-    <div class="col-md-12">
-        @if (session('message'))
-        <div class="alert alert-success">{{ session('message') }}</div>
-        @endif
-
-        <div class="card">
-            <div class="card-header">
-                <h3>Receipt's information
-                    <a href="{{ url('admin/receipt') }}" class="btn btn-danger btn-sm float-end">Back</a>
-                </h3>
+<div class="card">
+    <h5 class="card-header">Thông tin phiếu thu<a href="{{ url('admin/temporary') }}" class="btn btn-danger btn-sm text-white float-right">Trở về</a></h5>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+              <p><strong>ID:</strong> {{ $receipt->id }}</p>
+              <p><strong>Người nộp:</strong> {{ $receipt->person->name }}</p>
+              <p><strong>ID nhân khẩu:</strong> {{ $receipt->personId }}</p>
+              @if ($receipt->householdId)
+              <p><strong>Nộp cho hộ:</strong> {{ $receipt->householdId }}</p>
+              <p><strong>Ghi chú:</strong> {{ $receipt->note }}</p>
+              @endif
             </div>
-            <div class="card-body">
-                <table class="table table-bordered table-striped">
-                    <tr>
-                        <th>ID</th>
-                        <td>{{$receipt->id}}</td>
-                    </tr>
-                    <tr>
-                        <th>Household's ID</th>
-                        <td>{{$receipt->householdId}}</td>
-                    </tr>
-                    <tr>
-                        <th>Person's ID</th>
-                        <td>{{$receipt->personId}}</td>
-                    </tr>
-                    <tr>
-                        <th>Fee's ID</th>
-                        <td>{{$receipt->feeId}}</td>
-                    </tr>
-                    <tr>
-                        <th>Collecter's ID</th>
-                        <td>{{$receipt->collecterId}}</td>
-                    </tr>
-                    <tr>
-                        <th>Amount</th>
-                        <td>{{$receipt->amount}}</td>
-                    </tr>
-                    <tr>
-                        <th>Note</th>
-                        <td>{{$receipt->note}}</td>
-                    </tr>
-                    <tr>
-                        <th>Created at</th>
-                        <td>{{$receipt->created_at}}</td>
-                    </tr>
-                    <tr>
-                        <th>Updated at</th>
-                        <td>{{$receipt->updated_at}}</td>
-                    </tr>
-                </table>
-            </div>
+            <div class="col-md-6">
+              <p><strong>Khoản thu:</strong> {{ $receipt->fee->name }}</p>
+              <p><strong>Số tiền:</strong> {{ $receipt->amount }}</p>
+              <p><strong>Người thu:</strong> {{ $receipt->user->name }}</p>
+              <p><strong>Ngày tạo:</strong> {{ $receipt->created_at }}</p>
+              <p><strong>Ngày cập nhật:</strong> {{ $receipt->updated_at }}</p>
+          </div>
+
+          <div class="form-group col-md-12">
+            <a href="{{url('admin/receipt/'.$receipt->id.'/edit')}}" class="btn btn-primary">Sửa thông tin</a>
+          </div>
         </div>
     </div>
 </div>

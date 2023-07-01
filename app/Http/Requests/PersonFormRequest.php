@@ -39,7 +39,8 @@ class PersonFormRequest extends FormRequest
             'date'
         ],
         'gender'=> [
-            'nullable',
+            'required',
+            'in:male,female'
         ],
         'avatar' => [
             'nullable',
@@ -74,10 +75,12 @@ class PersonFormRequest extends FormRequest
             'string'
         ],
         'maritalStatus'=> [
-            'nullable'
+            'required',
+            'in:single,married'
         ],
         'status'=> [
-            'nullable'
+            'required',
+            'in:alive,dead'
         ]
         ];
     }

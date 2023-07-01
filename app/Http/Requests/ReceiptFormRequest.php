@@ -24,19 +24,12 @@ class ReceiptFormRequest extends FormRequest
         return [
             'householdId' => [
                 'nullable',
-                'integer'
             ],
             'personId' => [
                 'required',
-                'integer'
             ],
             'feeId' => [
                 'required',
-                'integer'
-            ],
-            'collecterId' => [
-                'required',
-                'integer'
             ],
             'amount' => [
                 'required',

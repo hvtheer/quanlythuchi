@@ -25,7 +25,10 @@ class HouseholdFormRequest extends FormRequest
             'address' => [
                 'required',
                 'string'
-            ]
+            ],
+            // 'ownerId' => [
+            //     'required'
+            // ]
         ];
     }
 }

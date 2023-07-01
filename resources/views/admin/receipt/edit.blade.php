@@ -1,60 +1,62 @@
-@extends('layouts.admin')
+@extends('admin.layouts.master')
 
-@section('content')
+@section('main-content')
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <h4>Edit receipt's information
-                    <a href="{{ url('admin/receipt') }}" class="btn btn-danger btn-sm text-white float-end">BACK</a>
-                </h4>
+<div class="card">
+    <h5 class="card-header">Chỉnh sửa phiếu thu
+        <a href="{{ url('admin/receipt') }}" class="btn btn-danger btn-sm text-white float-right">Trở về</a>
+    </h5>
+    <div class="card-body">
+        <form action="{{ url('admin/receipt/'.$receipt->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label>Người nộp<span class="text-danger">*</span></label>
+                    <input type="text" name="personId" placeholder="Họ tên đệm" value="{{$receipt->personId}}" class="form-control">
+                    @error('personId')
+                    <span class="text-danger">{{$message}}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label>Nộp cho hộ<span class="text-danger">*</span></label>
+                    <input type="text" name="householdId" placeholder="Tên" value="{{$receipt->householdId}}" class="form-control">
+                    @error('householdId')
+                    <span class="text-danger">{{$message}}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label>Khoản thu<span class="text-danger">*</span></label>
+                    <input type="text" name="feeId" placeholder="Tên" value="{{$receipt->fee->name}}" class="form-control">
+                    @error('feeId')
+                    <span class="text-danger">{{$message}}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label>Số tiền nộp<span class="text-danger">*</span></label>
+                    <input type="number" name="amount" placeholder="Tên" value="{{$receipt->amount}}" class="form-control">
+                    @error('amount')
+                    <span class="text-danger">{{$message}}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group col-md-12">
+                    <label>Ghi chú</span></label>
+                    <input type="text" name="note" placeholder="Căn cước công dân(CCCD)" value="{{$receipt->note}}" class="form-control">
+                    @error('note')
+                    <span class="text-danger">{{$message}}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group col-md-12">
+                    <button type="reset" class="btn btn-warning">Khôi phục</button>
+                    <button type="submit" class="btn btn-success">Lưu trữ</button>
+                </div>
             </div>
-            <div class="card-body">
-                <form action="{{ url('admin/receipt/'.$receipt->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-
-                    <div class="row">
-
-                        <div class="col-md-6 mb-3">
-                            <label>Household's ID</label>
-                            <input type="text" name="householdId" class="form-control" />
-                            @error('householdId') <small class="text-danger">{{ $message }}</small>@enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Person's ID</label>
-                            <input type="text" name="personId" class="form-control" />
-                            @error('personId') <small class="text-danger">{{ $message }}</small>@enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Fee's ID</label>
-                            <input type="text" name="feeId" class="form-control" />
-                            @error('feeId') <small class="text-danger">{{ $message }}</small>@enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Collecter's ID</label>
-                            <input type="text" name="collecterId" class="form-control" />
-                            @error('collecter') <small class="text-danger">{{ $message }}</small>@enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Amount</label>
-                            <input type="number" name="amount" class="form-control" />
-                            @error('amount') <small class="text-danger">{{ $message }}</small>@enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Note</label>
-                            <input type="text" name="note" class="form-control" />
-                            @error('note') <small class="text-danger">{{ $message }}</small>@enderror
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <button type="submit" class="btn btn-primary float-end">Save</button>
-                        </div>
-                    </div>
-                </form>
-
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 

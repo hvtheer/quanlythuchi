@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Person;
 use App\Models\Receipt;
+use App\Models\Household;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ReceiptFormRequest;
+use App\Models\Fee;
 
 class ReceiptController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request['search'] ?? "";
-        if ($search != "") {
-            $receipts = Receipt::where('feeId','LIKE',"%$search%")->orWhere('householdId','LIKE',"%$search%")->orWhere('personId','LIKE',"%$search%")->get();
-        } else {
-            $receipts = Receipt::all();
-        }
-        return view('admin.receipt.index', compact('receipts','search'));
+        $receipts = Receipt::getAllReceipts();
+        return view('admin.receipt.index', compact('receipts'));
     }
 
     public function show($receipt)
@@ -31,23 +30,19 @@ class ReceiptController extends Controller
 
     public function create()
     {
-        return view('admin.receipt.create');
+        $people = Person::all();
+        $households = Household::all();
+        $fees = Fee::all();
+        return view('admin.receipt.create', compact('people', 'households', 'fees'));
     }
 
     public function store(ReceiptFormRequest $request)
     {
         $validatedData = $request->validated();
-
-        $receipt = new Receipt;
-        $receipt->householdId = $validatedData['householdId'];
-        $receipt->personId = $validatedData['personId'];
-        $receipt->feeId = $validatedData['feeId'];
-        $receipt->collecterId = $validatedData['collecterId'];
-        $receipt->amount = $validatedData['amount'];
-        $receipt->note = $validatedData['note'];
-        $receipt->save();
-
-        return redirect('admin/receipt')->with('message','This receipt was added successfully');
+        $validatedData['userId'] = Auth::user()->id;
+        $receipt = Receipt::create($validatedData);
+    
+        return redirect('admin/receipt')->with('success', 'Receipt was added successfully');
     }
 
     public function edit($receipt)
@@ -61,19 +56,16 @@ class ReceiptController extends Controller
     public function update($receipt, ReceiptFormRequest $request)
     {
         $validatedData = $request->validated();
-        if (!$receipt = Receipt::findOrFail($receipt)) {
-            abort(404);
-        }
-        $receipt->householdId = $validatedData['householdId'];
-        $receipt->personId = $validatedData['personId'];
-        $receipt->feeId = $validatedData['feeId'];
-        $receipt->collecterId = $validatedData['collecterId'];
-        $receipt->amount = $validatedData['amount'];
-        $receipt->note = $validatedData['note'];
+        $receipt = Receipt::findOrFail($receipt);
+    
+        $receipt->fill($validatedData);
+        $validatedData['userId'] = Auth::user()->id;
+    
         $receipt->update();
-
-        return redirect('admin/receipt')->with('message','This receipt was updated successfully');
+    
+        return redirect('admin/receipt')->with('success', 'Receipt was updated successfully');
     }
+    
 
     public function destroy($receipt)
     {
@@ -82,6 +74,6 @@ class ReceiptController extends Controller
         }
         $receipt->delete();
 
-        return redirect()->back()->with('message','This receipt was deleted successfully');
+        return redirect()->back()->with('success','This receipt was deleted successfully');
     }
 }

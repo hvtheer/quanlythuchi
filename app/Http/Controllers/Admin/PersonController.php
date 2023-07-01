@@ -12,13 +12,8 @@ class PersonController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request['search'] ?? "";
-        if ($search != "") {
-            $persons = Person::where('firstName','LIKE',"%$search%")->orWhere('idCard','LIKE',"%$search%")->get();
-        } else {
-            $persons = Person::all();
-        }
-        return view('admin.person.index', compact('persons','search'));
+        $people = Person::getAllPeople();
+        return view('admin.person.index', compact('people'));
     }
 
     public function show($person)
@@ -26,8 +21,9 @@ class PersonController extends Controller
         if (!$person = Person::findOrFail($person)) {
             abort(404);
         }
+        $changes = $person->audits;
 
-        return view('admin.person.show', compact('person'));
+        return view('admin.person.show', compact('person', 'changes'));
     }
 
     public function create()
@@ -38,35 +34,19 @@ class PersonController extends Controller
     public function store(PersonFormRequest $request)
     {
         $validatedData = $request->validated();
-
-        $person = new Person;
-        $person->idCard = $validatedData['idCard'];
-        $person->firstName = $validatedData['firstName'];
-        $person->lastName = $validatedData['lastName'];
-        $person->dateOfBirth = $validatedData['dateOfBirth'];
-
-        if($request->hasFile('avatar')){
+    
+        if ($request->hasFile('avatar')) {
             $file = $request->file('avatar');
             $ext = $file->getClientOriginalExtension();
             $filename = time().'.'.$ext;
-
-            $file->move('uploads/avatar/',$filename);
-            $person->avatar = 'uploads/avatar/'.$filename;
+    
+            $file->move('uploads/avatar/', $filename);
+            $validatedData['avatar'] = 'uploads/avatar/' . $filename;
         }
-        $person->gender = $request->gender == true ? '1':'0';
-
-        $person->email = $validatedData['email'];
-        $person->numberPhone = $validatedData['numberPhone'];
-        $person->address = $validatedData['address'];
-        $person->ethnic = $validatedData['ethnic'];
-        $person->nationality = $validatedData['nationality'];
-        $person->occupation = $validatedData['occupation'];
-        $person->educationLevel = $validatedData['educationLevel'];
-        $person->maritalStatus = $request->maritalStatus == true ? '1':'0';
-        $person->status = $request->status == true ? '1':'0';
-        $person->save();
-
-        return redirect('admin/person')->with('message','Person was added successfully');
+    
+        $person = Person::create($validatedData);
+    
+        return redirect('admin/person')->with('success', 'Person was added successfully');
     }
 
     public function edit($person)
@@ -80,42 +60,29 @@ class PersonController extends Controller
     public function update($person, PersonFormRequest $request)
     {
         $validatedData = $request->validated();
-        if (!$person = Person::findOrFail($person)) {
-            abort(404);
-        }
-        $person->idCard = $validatedData['idCard'];
-        $person->firstName = $validatedData['firstName'];
-        $person->lastName = $validatedData['lastName'];
-        $person->dateOfBirth = $validatedData['dateOfBirth'];
-
-        if($request->hasFile('avatar')){
+        $person = Person::findOrFail($person);
+    
+        $person->fill($validatedData);
+    
+        if ($request->hasFile('avatar')) {
             $path = 'uploads/avatar/'.$person->avatar;
             if (File::exists($path)) {
                 File::delete($path);
             }
-
+    
             $file = $request->file('avatar');
             $ext = $file->getClientOriginalExtension();
             $filename = time().'.'.$ext;
-
-            $file->move('uploads/avatar/',$filename);
+    
+            $file->move('uploads/avatar/', $filename);
             $person->avatar = 'uploads/avatar/'.$filename;
         }
-        $person->gender = $request->gender == true ? '1':'0';
-
-        $person->email = $validatedData['email'];
-        $person->numberPhone = $validatedData['numberPhone'];
-        $person->address = $validatedData['address'];
-        $person->ethnic = $validatedData['ethnic'];
-        $person->nationality = $validatedData['nationality'];
-        $person->occupation = $validatedData['occupation'];
-        $person->educationLevel = $validatedData['educationLevel'];
-        $person->maritalStatus = $request->maritalStatus == true ? '1':'0';
-        $person->status = $request->status == true ? '1':'0';
+    
         $person->update();
-
-        return redirect('admin/person')->with('message','Person was updated successfully');
+    
+        return redirect('admin/person')->with('success', 'Person was updated successfully');
     }
+    
 
     public function destroy($person)
     {
@@ -128,6 +95,7 @@ class PersonController extends Controller
         }
         $person->delete();
 
-        return redirect()->back()->with('message','This person was deleted successfully');
+        return redirect()->back()->with('success','This person was deleted successfully');
     }
+
 }

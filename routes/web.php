@@ -17,10 +17,22 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/get-household-id', 'App\Http\Controllers\Admin\TemporaryController@getHouseholdId');
 
 Route::prefix('admin')->group(function() {
 
     Route::get('dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index']);
+
+    // User Routes
+    Route::controller(App\Http\Controllers\Admin\UserController::class)->group(function() {
+        Route::get('user', 'index');
+        Route::get('user/create', 'create');
+        Route::post('user', 'store');
+        Route::get('user/{user}/edit', 'edit');
+        Route::put('user/{user}', 'update');
+        Route::get('user/{user}/show', 'show');
+        Route::delete('user/{user}/delete', 'destroy');
+    });
 
     // Person Routes
     Route::controller(App\Http\Controllers\Admin\PersonController::class)->group(function() {
@@ -30,7 +42,7 @@ Route::prefix('admin')->group(function() {
         Route::get('person/{person}/edit', 'edit');
         Route::put('person/{person}', 'update');
         Route::get('person/{person}/show', 'show');
-        Route::get('person/{person}/delete', 'destroy');
+        Route::delete('person/{person}/delete', 'destroy');
     });
 
     // Household Routes
@@ -41,7 +53,7 @@ Route::prefix('admin')->group(function() {
         Route::get('household/{household}/edit', 'edit');
         Route::put('household/{household}', 'update');
         Route::get('household/{household}/show', 'show');
-        Route::get('household/{household}/delete', 'destroy');   
+        Route::delete('household/{household}/delete', 'destroy');   
     });
 
     // Temporary Routes
@@ -52,7 +64,7 @@ Route::prefix('admin')->group(function() {
         Route::get('temporary/{temp}/edit', 'edit');
         Route::put('temporary/{temp}', 'update');
         Route::get('temporary/{temp}/show', 'show');
-        Route::get('temporary/{temp}/delete', 'destroy');   
+        Route::delete('temporary/{temp}/delete', 'destroy');   
     });
 
     // Fee Routes
@@ -63,7 +75,7 @@ Route::prefix('admin')->group(function() {
         Route::get('fee/{fee}/edit', 'edit');
         Route::put('fee/{fee}', 'update');
         Route::get('fee/{fee}/show', 'show');
-        Route::get('fee/{fee}/delete', 'destroy');   
+        Route::delete('fee/{fee}/delete', 'destroy');   
     });
 
     // Receipt Routes
@@ -74,6 +86,6 @@ Route::prefix('admin')->group(function() {
         Route::get('receipt/{receipt}/edit', 'edit');
         Route::put('receipt/{receipt}', 'update');
         Route::get('receipt/{receipt}/show', 'show');
-        Route::get('receipt/{receipt}/delete', 'destroy');   
+        Route::delete('receipt/{receipt}/delete', 'destroy');   
     });
 });

@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\HouseholdMember;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Household extends Model
 {
@@ -12,10 +13,15 @@ class Household extends Model
     protected $table = 'households';
 
     protected $fillable = [
-        'address'
+        'address',
+        // 'ownerId'
     ];
 
-    public function householdMembers()
+    public static function getAllHouseholds(){
+        return  Household::orderBy('id','DESC')->paginate();
+    }
+
+    public function members()
     {
         return $this->hasMany(HouseholdMember::class, 'householdId', 'id');
     }

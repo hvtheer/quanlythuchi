@@ -11,13 +11,8 @@ class FeeController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request['search'] ?? "";
-        if ($search != "") {
-            $fees = Fee::where('name','LIKE',"%$search%")->get();
-        } else {
-            $fees = Fee::all();
-        }
-        return view('admin.fee.index', compact('fees','search'));
+        $fees = Fee::getAllFees();
+        return view('admin.fee.index', compact('fees'));
     }
 
     public function show($fee)
@@ -37,16 +32,9 @@ class FeeController extends Controller
     public function store(FeeFormRequest $request)
     {
         $validatedData = $request->validated();
-
-        $fee = new Fee;
-        $fee->name = $validatedData['name'];
-        $fee->amount = $validatedData['amount'];
-        $fee->isMandatory = $request->isMandatory ? '1':'0';
-        $fee->startDate = $validatedData['startDate'];
-        $fee->endDate = $validatedData['endDate'];
-        $fee->save();
-
-        return redirect('admin/fee')->with('message','This fee was added successfully');
+        $fee = Fee::create($validatedData);
+    
+        return redirect('admin/fee')->with('success', 'Fee was added successfully');
     }
 
     public function edit($fee)
@@ -60,18 +48,15 @@ class FeeController extends Controller
     public function update($fee, FeeFormRequest $request)
     {
         $validatedData = $request->validated();
-        if (!$fee = Fee::findOrFail($fee)) {
-            abort(404);
-        }
-        $fee->name = $validatedData['name'];
-        $fee->amount = $validatedData['amount'];
-        $fee->startDate = $validatedData['startDate'];
-        $fee->endDate = $validatedData['endDate'];
-        $fee->isMandatory = $request->isMandatory ? '1':'0';
+        $fee = Fee::findOrFail($fee);
+    
+        $fee->fill($validatedData);
+    
         $fee->update();
-
-        return redirect('admin/fee')->with('message','This fee was updated successfully');
+    
+        return redirect('admin/fee')->with('success', 'Fee was updated successfully');
     }
+    
 
     public function destroy($fee)
     {
@@ -80,6 +65,6 @@ class FeeController extends Controller
         }
         $fee->delete();
 
-        return redirect()->back()->with('message','This fee was deleted successfully');
+        return redirect()->back()->with('success','This fee was deleted successfully');
     }
 }

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->bigInteger('amount')->nullable();
-            $table->tinyInteger('isMandatory');
+            $table->enum('type', ['mandatory','voluntary']);
             $table->date('startDate');
             $table->date('endDate')->nullable();
             $table->timestamps();

@@ -13,8 +13,8 @@ class DashboardController extends Controller
     public function index()
     {
         $households = Household::all();
-        $persons = Person::all();
+        $people = Person::all();
         $receipts = Receipt::all();
-        return view('admin/dashboard', compact('households', 'persons', 'receipts'));
+        return view('admin/index', compact('households', 'people', 'receipts'));
     }
 }

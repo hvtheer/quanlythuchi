@@ -23,8 +23,5 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFive();
         Paginator::useBootstrapFour();
-        Blade::directive('money', function ($amount) {
-            return "<?php echo 'VND' . number_format($amount, 0); ?>";
-        });
     }
 }

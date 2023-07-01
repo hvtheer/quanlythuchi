@@ -24,11 +24,9 @@ class TemporaryFormRequest extends FormRequest
         return [
             'personId' => [
                 'required',
-                'integer'
             ],
             'householdId' => [
-                'required',
-                'integer'
+                'nullable'
             ],
             'startDate' => [
                 'required',
@@ -38,11 +36,15 @@ class TemporaryFormRequest extends FormRequest
                 'nullable',
                 'date'
             ],
+            'type' => [
+                'required',
+                'in:residence,absence'
+            ],
             'reason' => [
                 'required',
                 'string'
             ],
-            'tempAbsenceAddress' => [
+            'beforeAddress' => [
                 'nullable',
                 'string'
             ]

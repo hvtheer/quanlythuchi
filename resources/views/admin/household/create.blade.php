@@ -1,86 +1,155 @@
-@extends('layouts.admin')
+@extends('admin.layouts.master')
 
-@section('content')
+@section('main-content')
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <h4>Add household
-                    <a href="{{ url('admin/household') }}" class="btn btn-danger btn-sm text-white float-end">BACK</a>
-                </h4>
-            </div>
-            <div class="card-body">
-                <form action="{{ url('admin/household') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <label>Address</label>
-                            <input type="text" name="address" class="form-control" />
-                            @error('address') <small class="text-danger">{{ $message }}</small>@enderror
-                        </div>
-                        <div class="col-md-12">
-                            <h4>Members</h4>
-                        </div>
-                        <table class="table table-bordered table-striped" id="table">
-                            <tr>
-                                <th>Person's ID</th>
-                                <th>Relationship</th>
-                                <th>Owner</th>
-                                <th>Action</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="text" name="members[]['personId']" placeholder="Enter person's ID" class="form-control">
-                                </td>
-                                <td>
-                                    <input type="text" name="members[]['relationship']" placeholder="Enter relationship with the owner" class="form-control">
-                                </td>
-                                <td>
-                                    <input type="checkbox" name="members[]['isOwner']">
-                                </td>
-                                <td>
-                                    <button type="button" name="add" id="add" class="btn btn-success">Add</button>
-                                </td>
-                            </tr>
-                        </table>
-                        <div class="col-md-12 mb-3">
-                            <button type="submit" class="btn btn-primary float-end">Save</button>
-                        </div>
+<div class="card">
+    <h5 class="card-header">Thêm hộ khẩu
+      <a href="{{ url('admin/household') }}" class="btn btn-danger btn-sm text-white float-right">Trở về</a>
+    </h5>
+    <div class="card-body">
+      <form method="post" action="{{url('admin/household')}}">
+        @csrf
+        <div class="row">
+          <div class="col-md-12 mb-3">
+              <label>Address</label>
+              <input type="text" name="address" value="{{old('address')}}" class="form-control" />
+              @error('address') <small class="text-danger">{{ $message }}</small>@enderror
+          </div>
+          <div class="col-md-12">
+              <h4>Members</h4>
+          </div>
+          <table class="table table-bordered" id="table">
+            <thead>
+              <tr>
+                <th>Person's ID</th>
+                <th>Relationship</th>
+                <th>Owner</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="tbody">
+              <tr>
+                <td>
+                  <select name="personId[]" class="form-control" required>
+                    <option value="">Chọn nhân khẩu</option>
+                    @foreach ($people as $person)
+                    <option value="{{$person->id}}">{{$person->id}}</option>
+                    @endforeach
+                  </select>
+                </td>
+                <td>
+                  <select name="relationship[]" class="form-control" required>
+                    <option value="chuho">Chủ hộ</option>
+                    <option value="vochong">Vợ (chồng)</option>
+                    <option value="chamede">Cha đẻ, mẹ đẻ</option>
+                    <option value="chamenuoi">Cha nuôi, mẹ nuôi</option>
+                    <option value="conde">Con đẻ</option>
+                    <option value="connuoi">Con nuôi</option>
+                    <option value="ongba">Ông nội, bà nội</option>
+                    <option value="ongba">Ông ngoại, bà ngoại</option>
+                    <option value="anhchiem">Anh ruột; chị ruột; em ruột; cháu ruột</option>
+                    <option value="cu">Cụ nội, cụ ngoại</option>
+                    <option value="bacchucaucodi">Bác ruột, chú ruột, cậu ruột, cô ruột, dì ruột, chắt ruột</option>
+                    <option value="nguoigiamho">Người giám hộ</option>
+                    <option value="nguoionho">Người ở nhờ; ở mượn; ở thuê</option>
+                    <option value="nguoicungonho">Người cùng ở nhờ; cùng ở thuê; cùng ở mượn.</option>
+                  </select>
+                </td>
+                <td>
+                  <select name="isOwner[]" class="form-control">
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </td>
+                <td>
+                  <button type="button" name="add" id="add" class="btn btn-success">Add</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-                    </div>
-                </form>
-            </div>
+        
+@if ($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+          
+        <div class="form-group col-md-12">
+          <button type="reset" class="btn btn-warning">Khôi phục</button>
+           <button type="submit" class="btn btn-success">Lưu trữ</button>
         </div>
+        </div>
+      </form>
     </div>
 </div>
 
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script>
-    var i = 0;
-    $('#add').click( function() {
-        ++i;
-        $('#table').append(
-            `<tr>
-                <td>
-                    <input type="text" name="members[`+i+`]['personId']" placeholder="Enter person's ID" class="form-control">
+  // Add member dynamically
+  const addMemberButton = document.getElementById('add');
+  const membersContainer = document.getElementById('tbody');
+  const memberTemplate = `
+  <td>
+  <select name="personId[]" class="form-control">
+    <option value="">Chọn đi</option>
+    @foreach ($people as $person)
+    <option value="{{$person->id}}">{{$person->id}}</option>
+    @endforeach
+  </select>
+  </td>
+  <td>
+    <select name="relationship[]" class="form-control">
+      <option value="">Quan hệ với chủ hộ</option>
+      <option value="chuho">Chủ hộ</option>
+      <option value="vochong">Vợ (chồng)</option>
+      <option value="chamede">Cha đẻ, mẹ đẻ</option>
+      <option value="chamenuoi">Cha nuôi, mẹ nuôi</option>
+      <option value="conde">Con đẻ</option>
+      <option value="connuoi">Con nuôi</option>
+      <option value="ongba">Ông nội, bà nội</option>
+      <option value="ongba">Ông ngoại, bà ngoại</option>
+      <option value="anhchiem">Anh ruột; chị ruột; em ruột; cháu ruột</option>
+      <option value="cu">Cụ nội, cụ ngoại</option>
+      <option value="bacchucaucodi">Bác ruột, chú ruột, cậu ruột, cô ruột, dì ruột, chắt ruột</option>
+      <option value="nguoigiamho">Người giám hộ</option>
+      <option value="nguoionho">Người ở nhờ; ở mượn; ở thuê</option>
+      <option value="nguoicungonho">Người cùng ở nhờ; cùng ở thuê; cùng ở mượn.</option>
+    </select>
+  </td>
+  <td>
+                  <select name="isOwner[]" class="form-control">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                  </select>
                 </td>
-                <td>
-                    <input type="text" name="members[`+i+`]['relationship']" placeholder="Enter relationship with the owner" class="form-control">
-                </td>
-                <td>
-                    <input type="checkbox" name="members[`+i+`]['isOwner']">
-                </td>
-                <td>
-                    <button type="button" class="btn btn-danger remove-table-row">Remove</button>
-                </td>
-                </tr>`)
-    });
+  <td>
+    <button type="button" name="remove" class="btn btn-danger remove">Remove</button>
+  </td>
 
-    $(document).on('click','.remove-table-row', function () {
-        $(this).parents('tr').remove();
-    });
+`;
+
+
+  addMemberButton.addEventListener('click', function () {
+      const memberWrapper = document.createElement('tr');
+      memberWrapper.innerHTML = memberTemplate;
+      membersContainer.appendChild(memberWrapper);
+
+      const removeButtons = document.getElementsByClassName('remove');
+      for (let i = 0; i < removeButtons.length; i++) {
+          const removeButton = removeButtons[i];
+          removeButton.addEventListener('click', function () {
+              memberWrapper.remove();
+          });
+      }
+  });
+
+
+
 </script>
-@endsection
+@endpush

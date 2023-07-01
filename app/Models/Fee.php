@@ -14,8 +14,12 @@ class Fee extends Model
     protected $fillable = [
         'name',
         'amount',
-        'isMandatory',
+        'type',
         'startDate',
         'endDate'
     ];
+
+    public static function getAllFees(){
+        return  Fee::orderBy('id','DESC')->paginate(10);
+    }
 }

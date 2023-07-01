@@ -14,7 +14,10 @@ return new class extends Migration
         Schema::create('households', function (Blueprint $table) {
             $table->id();
             $table->string('address');
+            // $table->unsignedBigInteger('ownerId');
             $table->timestamps();
+
+            // $table->foreign('ownerId')->references('id')->on('persons')->onUpdate('cascade');
         });
     }
 

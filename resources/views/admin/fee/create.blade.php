@@ -1,53 +1,64 @@
-@extends('layouts.admin')
+@extends('admin.layouts.master')
 
-@section('content')
+@section('main-content')
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <h4>Add fee
-                    <a href="{{ url('admin/fee') }}" class="btn btn-danger btn-sm text-white float-end">BACK</a>
-                </h4>
-            </div>
-            <div class="card-body">
-                <form action="{{ url('admin/fee') }}" method="POST">
-                    @csrf
-                    <div class="row">
+<div class="card">
+    <h5 class="card-header">Thêm khoản thu
+      <a href="{{ url('admin/fee') }}" class="btn btn-danger btn-sm text-white float-right">Trở về</a>
+    </h5>
+    <div class="card-body">
+      <form method="post" action="{{url('admin/fee')}}">
+        @csrf
+        <div class="row">
+          <div class="form-group col-md-12">
+            <label>Tên khoản thu<span class="text-danger">*</span></label>
+            <input type="text" name="name" placeholder="Tên khoản thu"  value="{{old('name')}}" class="form-control">
+            @error('name')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
+          </div>
+  
+          <div class="form-group col-md-6">
+            <label>Số tiền<span class="text-danger">*</span></label>
+            <input type="number" name="amount" placeholder="Tên"  value="{{old('amount')}}" class="form-control">
+            @error('amount')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
+          </div>
+  
+          <div class="form-group col-md-6">
+            <label>Loại hình</label><span class="text-danger">*</span></label>
+            <select name="type" class="form-control">
+                <option value="mandatory">Bắt buộc</option>
+                <option value="voluntory">Tự nguyện</option>
+            </select>
+            @error('type')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
+          </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label>Name</label>
-                            <input type="text" name="name" class="form-control" />
-                            @error('name') <small class="text-danger">{{ $message }}</small>@enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Amount</label>
-                            <input type="number" name="amount" class="form-control" />
-                            @error('amount') <small class="text-danger">{{ $message }}</small>@enderror
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <label>Mandatory</label>
-                            <input type="checkbox" name="isMandatory"/>
-                            @error('isMandatory') <small class="text-danger">{{ $message }}</small>@enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Start date</label>
-                            <input type="date" name="startDate" class="form-control" placeholder="yyyy-mm-dd" pattern="\d{4}-\d{2}-\d{2}"/>
-                            @error('startDate') <small class="text-danger">{{ $message }}</small>@enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>End date</label>
-                            <input type="date" name="endDate" class="form-control" placeholder="yyyy-mm-dd" pattern="\d{4}-\d{2}-\d{2}"/>
-                            @error('endDate') <small class="text-danger">{{ $message }}</small>@enderror
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <button type="submit" class="btn btn-primary float-end">Save</button>
-                        </div>
-                    </div>
-                </form>
+          <div class="form-group col-md-6">
+            <label>Ngày bắt đầu<span class="text-danger">*</span></label>
+            <input type="date" name="startDate" placeholder="Ngày bắt đầu"  value="{{old('startDate')}}" class="form-control">
+            @error('startDate')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
+          </div>
 
-            </div>
+          <div class="form-group col-md-6">
+            <label>Ngày kết thúc<span class="text-danger">*</span></label>
+            <input type="date" name="endDate" placeholder="Ngày kết thúc"  value="{{old('endDate')}}" class="form-control">
+            @error('endDate')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
+          </div> 
+
+          <div class="form-group col-md-12">
+            <button type="reset" class="btn btn-warning">Khôi phục</button>
+             <button type="submit" class="btn btn-success">Lưu trữ</button>
+          </div>
         </div>
+      </form>
     </div>
 </div>
 

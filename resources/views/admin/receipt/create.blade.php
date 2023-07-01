@@ -1,58 +1,76 @@
-@extends('layouts.admin')
+@extends('admin.layouts.master')
 
-@section('content')
+@section('main-content')
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <h4>Add receipt
-                    <a href="{{ url('admin/receipt') }}" class="btn btn-danger btn-sm text-white float-end">BACK</a>
-                </h4>
-            </div>
-            <div class="card-body">
-                <form action="{{ url('admin/receipt') }}" method="POST">
-                    @csrf
-                    <div class="row">
+<div class="card">
+    <h5 class="card-header">Thêm phiếu thu
+      <a href="{{ url('admin/receipt') }}" class="btn btn-danger btn-sm text-white float-right">Trở về</a>
+    </h5>
+    <div class="card-body">
+      <form method="post" action="{{url('admin/receipt')}}">
+        @csrf
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label>Người nộp<span class="text-danger">*</span></label>
+            <select name="personId" class="form-control" required>
+              <option value="">Chọn ID nhân khẩu</option>
+              @foreach ($people as $person)
+              <option value="{{$person->id}}">{{$person->id.' '.$person->name}}</option>
+              @endforeach
+            </select>
+            @error('personId')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
+          </div>
+  
+          <div class="form-group col-md-6">
+            <label>Nộp cho hộ<span class="text-danger">*</span></label>
+            <select name="householdId" class="form-control" required>
+              <option value="">Chọn số hộ khẩu</option>
+              @foreach ($households as $household)
+              <option value="{{$household->id}}">{{$household->id}}</option>
+              @endforeach
+            </select>
+            @error('householdId')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
+          </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label>Household's ID</label>
-                            <input type="text" name="householdId" class="form-control" />
-                            @error('householdId') <small class="text-danger">{{ $message }}</small>@enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Person's ID</label>
-                            <input type="text" name="personId" class="form-control" />
-                            @error('personId') <small class="text-danger">{{ $message }}</small>@enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Fee's ID</label>
-                            <input type="text" name="feeId" class="form-control" />
-                            @error('feeId') <small class="text-danger">{{ $message }}</small>@enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Collecter's ID</label>
-                            <input type="text" name="collecterId" class="form-control" />
-                            @error('collecterId') <small class="text-danger">{{ $message }}</small>@enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Amount</label>
-                            <input type="number" name="amount" class="form-control" />
-                            @error('amount') <small class="text-danger">{{ $message }}</small>@enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Note</label>
-                            <input type="text" name="note" class="form-control" />
-                            @error('note') <small class="text-danger">{{ $message }}</small>@enderror
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <button type="submit" class="btn btn-primary float-end">Save</button>
-                        </div>
-                    </div>
-                </form>
+          <div class="form-group col-md-6">
+            <label>Khoản thu<span class="text-danger">*</span></label>
+            <select name="feeId" class="form-control" required>
+              <option value="">Chọn khoản thu</option>
+              @foreach ($fees as $fee)
+              <option value="{{$fee->id}}">{{$fee->name}}</option>
+              @endforeach
+            </select>            
+            @error('feeId')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
+          </div>
 
-            </div>
+          <div class="form-group col-md-6">
+            <label>Số tiền nộp<span class="text-danger">*</span></label>
+            <input type="number" name="amount" placeholder="Tên"  value="{{old('amount')}}" class="form-control">
+            @error('amount')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
+          </div>
+
+          <div class="form-group col-md-12">
+            <label>Ghi chú</span></label>
+            <input type="text" name="note" placeholder="Căn cước công dân(CCCD)"  value="{{old('note')}}" class="form-control">
+            @error('note')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
+          </div>
+
+          <div class="form-group col-md-12">
+            <button type="reset" class="btn btn-warning">Khôi phục</button>
+             <button type="submit" class="btn btn-success">Lưu trữ</button>
+          </div>
         </div>
+      </form>
     </div>
 </div>
 

@@ -16,14 +16,14 @@ return new class extends Migration
             $table->unsignedBigInteger('householdId')->nullable();
             $table->unsignedBigInteger('personId');
             $table->unsignedBigInteger('feeId');
-            $table->unsignedBigInteger('collecterId');
+            $table->unsignedBigInteger('userId');
             $table->integer('amount');
             $table->string('note')->nullable();
             $table->timestamps();
             $table->foreign('householdId')->references('id')->on('households');
-            $table->foreign('personId')->references('id')->on('persons');
-            $table->foreign('feeId')->references('id')->on('fees');
-            $table->foreign('collecterId')->references('personId')->on('users');
+            $table->foreign('personId')->references('id')->on('persons')->onUpdate('cascade');
+            $table->foreign('feeId')->references('id')->on('fees')->onUpdate('cascade');
+            $table->foreign('userId')->references('id')->on('users')->onUpdate('cascade');
         });
     }
 

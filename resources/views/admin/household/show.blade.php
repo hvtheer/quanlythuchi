@@ -1,67 +1,75 @@
-@extends('layouts.admin')
+@extends('admin.layouts.master')
 
-@section('content')
+@section('main-content')
 
-<div class="row">
-    <div class="col-md-12">
-        @if (session('message'))
-        <div class="alert alert-success">{{ session('message') }}</div>
-        @endif
+<div class="card">
+    <h5 class="card-header">Hộ khẩu
+        <a href="{{ url('admin/household') }}" class="btn btn-danger btn-sm text-white float-right">Trở về</a>
+    </h5>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <p><strong>Số hộ khẩu: </strong> {{$household->id}}</p>
+                <p><strong>Địa chỉ: </strong> {{ $household->address }}</p>
 
-        <div class="card">
-            <div class="card-header">
-                <h3>Household's information
-                    <a href="{{ url('admin/household') }}" class="btn btn-danger btn-sm float-end">Back</a>
-                </h3>
+            <div class="col-md-12">
+                <h5>Thành viên</h5>
             </div>
-            <div class="card-body">
-                <table class="table table-bordered table-striped">
+            <table class="table table-bordered" id="table">
+                <thead>
                     <tr>
-                        <th>ID</th>
-                        <td>{{$household->id}}</td>
+                        <th>ID nhân khẩu</th>
+                        <th>Ảnh đại diện</th>
+                        <th>Họ và tên</th>
+                        <th>Mối quan hệ với chủ hộ</th>
                     </tr>
-                    <tr>
-                        <th>Address</th>
-                        <td>{{ $household->address }}</td>
-                    </tr>
-                    <tr>
-                        <th>Members' number</th>
-                        <td>{{ $household->householdMembers->count() }}</td>
-                    </tr>
-                    <tr>
-                        <th>Created at</th>
-                        <td>{{$household->created_at}}</td>
-                    </tr>
-                    <tr>
-                        <th>Updated at</th>
-                        <td>{{$household->updated_at}}</td>
-                    </tr>
-                </table>
-                <table class="table table-bordered table-striped" id="table">
-                    <tr>
-                        <th>Person's ID</th>
-                        <th>Relationship</th>
-                        <th>Owner</th>
-                        <th>Action</th>
-                    </tr>
+                </thead>
+                <tbody id="tbody">
                     @foreach ($members as $member)
-                        <tr>
-                            <td>
-                                <input type="text" name="members[]['personId']" value="{{ $member->personId }}" class="form-control">
-                            </td>
-                            <td>
-                                <input type="text" name="members[]['relationship']" value="{{ $member->relationship }}" class="form-control">
-                            </td>
-                            <td>
-                                <input type="checkbox" name="members[]['isOwner']" {{ $member->isOwner ? 'checked':'' }}>
-                            </td>
-                            <td>
-                                <a class="btn btn-primary" href="{{ url('admin/person/'.$member->personId.'/show') }}">Info</a>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>{{$member->personId}}</td>
+                        <td>
+                            <img src="{{ asset($member->person->avatar) }}" style="width: 40px; height: 40px" alt="Avatar" >
+                          </td>
+                        <td>{{$member->person->name}}</td>
+                        <td>
+                            @if ($member->relationship == 'chuho')
+                            Chủ hộ
+                            @elseif ($member->relationship == 'vochong')
+                            Vợ (chồng)
+                            @elseif ($member->relationship == 'chamede')
+                            Cha đẻ, mẹ đẻ
+                            @elseif ($member->relationship == 'chamenuoi')
+                            Cha nuôi, mẹ nuôi
+                            @elseif ($member->relationship == 'conde')
+                            Con đẻ
+                            @elseif ($member->relationship == 'connuoi')
+                            Con nuôi
+                            @elseif ($member->relationship == 'ongba')
+                            Ông nội, bà nội
+                            @elseif ($member->relationship == 'ongngoai')
+                            Ông ngoại, bà ngoại
+                            @elseif ($member->relationship == 'anhchiem')
+                            Anh ruột; chị ruột; em ruột; cháu ruột
+                            @elseif ($member->relationship == 'cu')
+                            Cụ nội, cụ ngoại
+                            @elseif ($member->relationship == 'bacchucaucodi')
+                            Bác ruột, chú ruột, cậu ruột, cô ruột, dì ruột, chắt ruột
+                            @elseif ($member->relationship == 'nguoigiamho')
+                            Người giám hộ
+                            @elseif ($member->relationship == 'nguoionho')
+                            Người ở nhờ; ở mượn; ở thuê
+                            @elseif ($member->relationship == 'nguoicungonho')
+                            Người cùng ở nhờ; cùng ở thuê; cùng ở mượn.
+                            @endif
+                        </td>
+                    </tr>
                     @endforeach
-                </table>
-            </div>
+                </tbody>
+            </table>
+            <div class="form-group col-md-12">
+                <a href="{{url('admin/household/'.$household->id.'/edit')}}" class="btn btn-primary">Sửa thông tin</a>
+              </div>
         </div>
     </div>
 </div>
