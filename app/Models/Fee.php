@@ -20,7 +20,7 @@ class Fee extends Model
     ];
 
     public static function getAllFees(){
-        return  Fee::orderBy('id','DESC')->paginate(10);
+        return  Fee::orderBy('id','DESC')->paginate();
     }
 
     public function receipts()

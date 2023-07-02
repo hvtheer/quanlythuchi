@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigInteger('amount')->nullable();
             $table->enum('type', ['mandatory','voluntary']);
             $table->date('startDate');
-            $table->date('endDate')->nullable();
+            $table->date('endDate');
             $table->timestamps();
         });
     }

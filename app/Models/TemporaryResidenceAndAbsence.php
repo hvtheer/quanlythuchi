@@ -23,7 +23,7 @@ class TemporaryResidenceAndAbsence extends Model
     ];
 
     public static function getAllTemporaryResidenceAndAbsence(){
-        return  TemporaryResidenceAndAbsence::orderBy('id','DESC')->paginate(10);
+        return  TemporaryResidenceAndAbsence::orderBy('id','DESC')->paginate();
     }
 
     public function person()

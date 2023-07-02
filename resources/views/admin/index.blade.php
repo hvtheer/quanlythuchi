@@ -139,7 +139,11 @@
               @if($fee->type == 'mandatory')
                 <?php
                   $receiptAmountSum = $fee->receipts->sum('amount');
-                  $progress = $receiptAmountSum / ($fee->amount * $households->count());
+                  if ($fee->receipts->count('householdId')) {
+                    $progress = $receiptAmountSum / ($fee->amount * $households->count());
+                  } else {
+                    $progress = 0;
+                  }
                   $progressPercentage = round(($progress * 100), 0);
                 ?>
                 <h4 class="small font-weight-bold">{{ $fee->name }} <span class="float-right">{{ $progressPercentage }}%</span></h4>

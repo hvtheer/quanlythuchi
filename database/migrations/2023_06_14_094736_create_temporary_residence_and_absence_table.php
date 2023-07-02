@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('householdId')->nullable();
             $table->unsignedBigInteger('userId');
             $table->date('startDate')->default(now());
-            $table->date('endDate')->nullable();
+            $table->date('endDate');
             $table->string('reason');
             $table->enum('type',['residence', 'absence']);
             $table->string('beforeAddress')->nullable();

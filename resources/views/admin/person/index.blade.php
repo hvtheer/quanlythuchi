@@ -47,7 +47,7 @@
                   </td>
                   <td>{{$person->name}}</td>
                   <td>{{$person->age()}}</td>
-                  <td>{{$person->gender}}</td>
+                  <td>{{$person->gender == 'male' ? 'Nam':'Nữ'}}</td>
                   <td>{{$person->idCard}}</td>
                   <td>
                     <a href="{{url('admin/person/'.$person->id.'/edit')}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
