@@ -23,8 +23,8 @@ return new class extends Migration
             $table->string('beforeAddress')->nullable();
             $table->timestamps();
 
-            $table->foreign('userId')->references('id')->on('users')->onUpdate('cascade');
-            $table->foreign('personId')->references('id')->on('persons')->onUpdate('cascade');
+            $table->foreign('userId')->references('id')->on('users');
+            $table->foreign('personId')->references('id')->on('persons');
             $table->foreign('householdId')->references('id')->on('households');
         });
     }

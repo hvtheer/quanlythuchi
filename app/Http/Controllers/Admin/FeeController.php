@@ -6,6 +6,7 @@ use App\Models\Fee;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FeeFormRequest;
+use App\Models\Household;
 
 class FeeController extends Controller
 {
@@ -17,11 +18,10 @@ class FeeController extends Controller
 
     public function show($fee)
     {
-        if (!$fee = Fee::findOrFail($fee)) {
-            abort(404);
-        }
+        $fee = Fee::findOrFail($fee);
+        $households = Household::all();
 
-        return view('admin.fee.show', compact('fee'));
+        return view('admin.fee.show', compact('fee', 'households'));
     }
 
     public function create()

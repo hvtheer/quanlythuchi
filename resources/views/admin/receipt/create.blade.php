@@ -25,7 +25,7 @@
   
           <div class="form-group col-md-6">
             <label>Nộp cho hộ<span class="text-danger">*</span></label>
-            <select name="householdId" class="form-control" required>
+            <select name="householdId" class="form-control">
               <option value="">Chọn số hộ khẩu</option>
               @foreach ($households as $household)
               <option value="{{$household->id}}">{{$household->id}}</option>

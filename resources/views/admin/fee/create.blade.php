@@ -30,7 +30,7 @@
             <label>Loại hình</label><span class="text-danger">*</span></label>
             <select name="type" class="form-control">
                 <option value="mandatory">Bắt buộc</option>
-                <option value="voluntory">Tự nguyện</option>
+                <option value="voluntary">Tự nguyện</option>
             </select>
             @error('type')
             <span class="text-danger">{{$message}}</span>

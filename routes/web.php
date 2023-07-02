@@ -21,7 +21,9 @@ Route::get('/get-household-id', 'App\Http\Controllers\Admin\TemporaryController@
 
 Route::prefix('admin')->group(function() {
 
-    Route::get('dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index']);
+
+    Route::get('dashboard', 'App\Http\Controllers\Admin\DashboardController@index');
+    Route::get('/income', [App\Http\Controllers\Admin\DashboardController::class, 'incomeChart'])->name('receipts.income');
 
     // User Routes
     Route::controller(App\Http\Controllers\Admin\UserController::class)->group(function() {

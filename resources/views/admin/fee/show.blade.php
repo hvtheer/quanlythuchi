@@ -10,6 +10,10 @@
               <p><strong>ID khoản thu:</strong> {{ $fee->id }}</p>
               <p><strong>Tên khoản thu:</strong> {{ $fee->name }}</p>
               <p><strong>Loại hình:</strong> {{ $fee->type == 'mandatory' ? 'Bắt buộc':'Tự nguyện' }}</p>
+              <p><strong>Tổng số tiền đã thu:</strong> {{ $fee->receipts->sum('amount') }} VNĐ</p>
+              @if ($fee->type == 'mandatory')
+              <p><strong>Số hộ đã thu:</strong> {{ $fee->receipts->count('householdId') }}/{{$households->count()}}</p>
+              @endif
           </div>
           <div class="col-md-6">
             <p><strong>Ngày bắt đầu:</strong>{{$fee->startDate}}</p>
@@ -17,10 +21,50 @@
             <p><strong>Ngày tạo:</strong> {{ $fee->created_at }}</p>
             <p><strong>Ngày cập nhật:</strong> {{ $fee->updated_at }}</p>
         </div>
+        <div class="form-group col-md-12">
+            <a href="{{url('admin/fee/'.$fee->id.'/edit')}}" class="btn btn-primary">Sửa thông tin</a>
+          </div>
 
-            <div class="form-group col-md-12">
-              <a href="{{url('admin/fee/'.$fee->id.'/edit')}}" class="btn btn-primary">Sửa thông tin</a>
-            </div>
+            @if($fee->receipts->count('householdId') > 0)
+            <table class="table table-bordered" id="banner-dataTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Chủ hộ</th>
+                  <th>Địa chỉ</th>
+                  <th>Số thành viên</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>ID</th>
+                  <th>Chủ hộ</th>
+                  <th>Địa chỉ</th>
+                  <th>Số thành viên</th>
+                </tr>
+              </tfoot>
+              <tbody>
+                @foreach($fee->receipts as $receipt)
+                    @if($receipt->household)
+                        <tr>
+                            <td>{{$receipt->household->id}}</td>
+                            <td>
+                            @foreach ($receipt->household->members as $member)
+                                @if ($member->isOwner)
+                                    {{$member->person->name}}
+                                @endif
+                            @endforeach
+                            </td>
+                            <td>{{$receipt->household->address}}</td>
+                            <td>{{$receipt->household->members->count()}}</td>
+                        </tr>  
+                    @endif
+                @endforeach
+              </tbody>
+            </table>
+            @else
+              <h6 class="text-center">Không tìm thấy hộ khẩu nào. Xin hãy thêm hộ khẩu!</h6>
+            @endif
         </div>
     </div>
 </div>

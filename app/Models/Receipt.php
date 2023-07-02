@@ -38,4 +38,9 @@ class Receipt extends Model
     {
         return $this->belongsTo(User::class, 'userId', 'id');
     }
+
+    public function household()
+    {
+        return $this->belongsTo(Household::class, 'householdId', 'id');
+    }
 }

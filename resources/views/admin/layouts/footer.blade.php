@@ -1,5 +1,5 @@
 
-      <!-- Footer -->
+      {{-- <!-- Footer -->
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
@@ -7,7 +7,7 @@
           </div>
         </div>
       </footer>
-      <!-- End of Footer -->
+      <!-- End of Footer --> --}}
 
     </div>
     <!-- End of Content Wrapper -->
@@ -34,9 +34,9 @@
   <!-- Page level plugins -->
   <script src="{{asset('backend/vendor/chart.js/Chart.min.js')}}"></script>
 
-  <!-- Page level custom scripts -->
-  {{-- <script src="{{asset('backend/js/demo/chart-area-demo.js')}}"></script> --}}
-  {{-- <script src="{{asset('backend/js/demo/chart-pie-demo.js')}}"></script> --}}
+  {{-- <!-- Page level custom scripts -->
+  <script src="{{asset('backend/js/demo/chart-area-demo.js')}}"></script> 
+  <script src="{{asset('backend/js/demo/chart-pie-demo.js')}}"></script> --}}
 
   @stack('scripts')
 

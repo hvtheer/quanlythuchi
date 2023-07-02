@@ -25,4 +25,10 @@ class Household extends Model
     {
         return $this->hasMany(HouseholdMember::class, 'householdId', 'id');
     }
+
+    public function receipts()
+    {
+        return $this->hasMany(Receipt::class, 'householdId', 'id');
+    }
+
 }

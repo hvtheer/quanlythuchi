@@ -22,4 +22,9 @@ class Fee extends Model
     public static function getAllFees(){
         return  Fee::orderBy('id','DESC')->paginate(10);
     }
+
+    public function receipts()
+    {
+        return $this->hasMany(Receipt::class, 'feeId', 'id');
+    }
 }

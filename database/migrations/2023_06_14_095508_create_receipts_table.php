@@ -21,9 +21,9 @@ return new class extends Migration
             $table->string('note')->nullable();
             $table->timestamps();
             $table->foreign('householdId')->references('id')->on('households');
-            $table->foreign('personId')->references('id')->on('persons')->onUpdate('cascade');
-            $table->foreign('feeId')->references('id')->on('fees')->onUpdate('cascade');
-            $table->foreign('userId')->references('id')->on('users')->onUpdate('cascade');
+            $table->foreign('personId')->references('id')->on('persons');
+            $table->foreign('feeId')->references('id')->on('fees');
+            $table->foreign('userId')->references('id')->on('users');
         });
     }
 

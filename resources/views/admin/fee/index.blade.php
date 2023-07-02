@@ -43,7 +43,7 @@
                 <tr>
                   <td>{{$fee->id}}</td>
                   <td>{{$fee->name}}</td>
-                  <td>{{$fee->amount}}</td>
+                  <td>{{$fee->amount}} VNĐ</td>
                   <td>{{$fee->type == 'mandatory' ? 'Bắt buộc':'Tự nguyện'}}</td>
                   <td>{{$fee->startDate}}</td>
                   <td>{{$fee->endDate}}</td>

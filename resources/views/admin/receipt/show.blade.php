@@ -3,7 +3,7 @@
 @section('main-content')
 
 <div class="card">
-    <h5 class="card-header">Thông tin phiếu thu<a href="{{ url('admin/temporary') }}" class="btn btn-danger btn-sm text-white float-right">Trở về</a></h5>
+    <h5 class="card-header">Thông tin phiếu thu<a href="{{ url('admin/receipt') }}" class="btn btn-danger btn-sm text-white float-right">Trở về</a></h5>
     <div class="card-body">
         <div class="row">
             <div class="col-md-6">
@@ -17,7 +17,7 @@
             </div>
             <div class="col-md-6">
               <p><strong>Khoản thu:</strong> {{ $receipt->fee->name }}</p>
-              <p><strong>Số tiền:</strong> {{ $receipt->amount }}</p>
+              <p><strong>Số tiền:</strong> {{ $receipt->amount }} VNĐ</p>
               <p><strong>Người thu:</strong> {{ $receipt->user->name }}</p>
               <p><strong>Ngày tạo:</strong> {{ $receipt->created_at }}</p>
               <p><strong>Ngày cập nhật:</strong> {{ $receipt->updated_at }}</p>
