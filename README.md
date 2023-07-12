@@ -6,9 +6,13 @@ git clone https://github.com/hvtheer/quanlythuchi.git
 
 ## Install
 
-- XAMPP: tự xem trên mạng
+- XAMPP: tự xem trên mạng, rồi cài composer
+```
+composer install
+```
 - Cái này chạy ở 1 terminal
 ```
+cp .env.example .env
 php artisan migrate
 ```
 ```
