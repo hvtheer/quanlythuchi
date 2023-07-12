@@ -47,7 +47,8 @@ class TemporaryController extends Controller
         if (!$temporary = TemporaryResidenceAndAbsence::findOrFail($temporary)) {
             abort(404);
         }
-        return view('admin.temporary.edit', compact('temporary'));
+        $people = Person::all();
+        return view('admin.temporary.edit', compact('temporary', 'people'));
     }
     
     public function update($temporary, TemporaryFormRequest $request)

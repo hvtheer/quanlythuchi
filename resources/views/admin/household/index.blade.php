@@ -18,22 +18,13 @@
         <table class="table table-bordered" id="banner-dataTable" width="100%" cellspacing="0">
           <thead>
             <tr>
-              <th>ID</th>
+              <th>Mã hộ khẩu</th>
               <th>Chủ hộ</th>
               <th>Địa chỉ</th>
               <th>Số thành viên</th>
               <th>Hành động</th>
             </tr>
           </thead>
-          <tfoot>
-            <tr>
-              <th>ID</th>
-              <th>Chủ hộ</th>
-              <th>Địa chỉ</th>
-              <th>Số thành viên</th>
-              <th>Hành động</th>
-            </tr>
-          </tfoot>
           <tbody>
             @foreach($households as $household)   
                 <tr>
@@ -95,7 +86,7 @@
             "columnDefs":[
                 {
                     "orderable":false,
-                    "targets":[4]
+                    "targets":[]
                 }
             ]
         } );

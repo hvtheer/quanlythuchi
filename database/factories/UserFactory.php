@@ -21,7 +21,7 @@ class UserFactory extends Factory
 
     public function definition()
     {
-        $person = \App\Models\Person::factory()->create();
+        $person = \App\Models\Person::inRandomOrder()->first();
     
         return [
             'name' => $person->name,

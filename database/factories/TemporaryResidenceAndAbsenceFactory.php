@@ -17,15 +17,11 @@ class TemporaryResidenceAndAbsenceFactory extends Factory
     {
         $createdAt = $this->faker->dateTimeBetween('2023-1-1', 'now');
         $startDate = $this->faker->dateTimeBetween($createdAt, '2023-12-31')->format('Y-m-d');
-        
+        $personId = \App\Models\Person::inRandomOrder()->first()->id;
         return [
-            'personId' => function () {
-                return \App\Models\Person::factory()->create()->id;
-            },
-            'householdId' => null, // Replace with the logic to assign a household ID
-            'userId' => function () {
-                return \App\Models\User::factory()->create()->id;
-            },
+            'personId' => $personId,
+            'householdId' => null,
+            'userId' => '1',
             'startDate' => $startDate,
             'endDate' => $this->faker->dateTimeBetween($startDate, '2023-12-31')->format('Y-m-d'),
             'reason' => $this->faker->sentence,

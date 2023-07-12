@@ -35,15 +35,13 @@ class PersonController extends Controller
     {
         $validatedData = $request->validated();
     
-        if ($request->hasFile('avatar')) {
+        if($request->hasFile('avatar')){
             $file = $request->file('avatar');
             $ext = $file->getClientOriginalExtension();
             $filename = time().'.'.$ext;
-    
-            $file->move('uploads/avatar/', $filename);
-            $validatedData['avatar'] = 'uploads/avatar/' . $filename;
+            $file->move('uploads/avatar/',$filename);
+            $validatedData['avatar'] = 'uploads/avatar/'.$filename;
         }
-    
         $person = Person::create($validatedData);
     
         return redirect('admin/person')->with('success', 'Person was added successfully');
@@ -62,21 +60,20 @@ class PersonController extends Controller
         $validatedData = $request->validated();
         $person = Person::findOrFail($person);
     
-        $person->fill($validatedData);
-    
-        if ($request->hasFile('avatar')) {
-            $path = 'uploads/avatar/'.$person->avatar;
+        if($request->hasFile('avatar')){
+            $path = $person->avatar;
             if (File::exists($path)) {
                 File::delete($path);
             }
-    
             $file = $request->file('avatar');
             $ext = $file->getClientOriginalExtension();
             $filename = time().'.'.$ext;
-    
-            $file->move('uploads/avatar/', $filename);
-            $person->avatar = 'uploads/avatar/'.$filename;
+            $file->move('uploads/avatar/',$filename);
+            $validatedData['avatar'] = 'uploads/avatar/'.$filename;
         }
+
+
+        $person->fill($validatedData);
     
         $person->update();
     

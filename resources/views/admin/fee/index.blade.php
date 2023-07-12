@@ -18,7 +18,7 @@
         <table class="table table-bordered" id="banner-dataTable" width="100%" cellspacing="0">
           <thead>
             <tr>
-              <th>ID</th>
+              <th>Mã khoản thu</th>
               <th>Tên khoản thu</th>
               <th>Số tiền</th>
               <th>Loại hình</th>
@@ -27,23 +27,14 @@
               <th>Hành động</th>
             </tr>
           </thead>
-          <tfoot>
-            <tr>
-              <th>ID</th>
-              <th>Tên khoản thu</th>
-              <th>Số tiền</th>
-              <th>Loại hình</th>
-              <th>Ngày bắt đầu</th>
-              <th>Ngày kết thúc</th>
-              <th>Hành động</th>
-            </tr>
-          </tfoot>
           <tbody>
             @foreach($fees as $fee)   
                 <tr>
                   <td>{{$fee->id}}</td>
                   <td>{{$fee->name}}</td>
-                  <td>{{$fee->amount}} VNĐ</td>
+
+                    <td>{{$fee->amount}}                  @if($fee->amount > 0)VNĐ                  @endif</td>
+
                   <td>{{$fee->type == 'mandatory' ? 'Bắt buộc':'Tự nguyện'}}</td>
                   <td>{{$fee->startDate}}</td>
                   <td>{{$fee->endDate}}</td>

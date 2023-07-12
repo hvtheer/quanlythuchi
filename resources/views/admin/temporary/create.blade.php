@@ -14,9 +14,9 @@
           <div class="form-group col-md-6">
             <label>Người làm đơn<span class="text-danger">*</span></label>
             <select name="personId" class="form-control" required>
-              <option value="">Chọn ID nhân khẩu</option>
+              <option value="">Chọn mã nhân khẩu</option>
               @foreach ($people as $person)
-              <option value="{{$person->id}}">{{$person->id}}</option>
+              <option value="{{$person->id}}">{{$person->id.' '.$person->name}}</option>
               @endforeach
             </select>
             @error('personId')

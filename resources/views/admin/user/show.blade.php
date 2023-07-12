@@ -9,12 +9,9 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-6">
-                <p><strong>ID:</strong> {{ $user->id }}</p>
-                <p><strong>ID nhân khẩu:</strong> {{ $user->personId }}</p>
+                <p><strong>Mã quản lý:</strong> {{ $user->id }}</p>
+                <p><strong>Mã nhân khẩu:</strong> {{ $user->personId }}</p>
                 <p><strong>Họ và tên:</strong> {{ $user->person->name }}</p>
-                <p><strong>Ảnh đại diện:</strong></p>
-                <img src="{{ asset($user->person->name) }}" width="70px" height="70px">
-                <p><strong></strong></p>
             </div>
             <div class="col-md-6">
                 <p><strong>Email:</strong> {{ $user->email }}</p>

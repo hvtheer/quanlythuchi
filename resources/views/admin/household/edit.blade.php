@@ -15,140 +15,105 @@
                   <p><strong>Số hộ khẩu: </strong> {{$household->id}}</p>
                 </div>
                 <div class="col-md-12 mb-3">
-                    <label>Address</label>
+                    <label>Địa chỉ</label>
                     <input type="text" name="address" value="{{$household->address}}" class="form-control" />
                     @error('address') <small class="text-danger">{{ $message }}</small> @enderror
                 </div>
 
                 <div class="col-md-12">
-                    <h5>Members</h5>
+                    <h5>Các thành viên</h5>
                 </div>
                 <table class="table table-bordered" id="table">
                     <thead>
                         <tr>
-                            <th>Person's ID</th>
-                            <th>Relationship</th>
-                            <th>Owner</th>
-                            <th>Action</th>
+                            <th>Mã nhân khẩu</th>
+                            <th>Quan hệ với chủ hộ</th>
+                            <th>Là chủ hộ</th>
+                            <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody id="tbody">
                       @if ($members->count() > 0)
                       @foreach ($members as $member)
                       <tr>
-                          <td>
-                              <select name="personId[]" class="form-control" required>
-                                  <option value="">Chọn nhân khẩu</option>
-                                  @foreach ($people as $person)
-                                  <option value="{{$person->id}}" {{ $person->id == $member->personId ? 'selected' : '' }}>
-                                      {{$person->id}}
-                                  </option>
-                                  @endforeach
-                              </select>
-                          </td>
-                          <td>
-                              <select name="relationship[]" class="form-control" required>
-                                  <option value="">Quan hệ với chủ hộ</option>
-                                  <option value="chuho" {{ $member->relationship == 'chuho' ? 'selected' : '' }}>
-                                      Chủ hộ
-                                  </option>
-                                  <option value="vochong" {{ $member->relationship == 'vochong' ? 'selected' : '' }}>
-                                      Vợ (chồng)
-                                  </option>
-                                  <option value="chamede" {{ $member->relationship == 'chamede' ? 'selected' : '' }}>
-                                      Cha đẻ, mẹ đẻ
-                                  </option>
-                                  <option value="chamenuoi"
-                                      {{ $member->relationship == 'chamenuoi' ? 'selected' : '' }}>
-                                      Cha nuôi, mẹ nuôi
-                                  </option>
-                                  <option value="conde" {{ $member->relationship == 'conde' ? 'selected' : '' }}>
-                                      Con đẻ
-                                  </option>
-                                  <option value="connuoi" {{ $member->relationship == 'connuoi' ? 'selected' : '' }}>
-                                      Con nuôi
-                                  </option>
-                                  <option value="ongba" {{ $member->relationship == 'ongba' ? 'selected' : '' }}>
-                                      Ông nội, bà nội
-                                  </option>
-                                  <option value="ongba" {{ $member->relationship == 'ongba' ? 'selected' : '' }}>
-                                      Ông ngoại, bà ngoại
-                                  </option>
-                                  <option value="anhchiem"
-                                      {{ $member->relationship == 'anhchiem' ? 'selected' : '' }}>
-                                      Anh ruột; chị ruột; em ruột; cháu ruột
-                                  </option>
-                                  <option value="cu" {{ $member->relationship == 'cu' ? 'selected' : '' }}>
-                                      Cụ nội, cụ ngoại
-                                  </option>
-                                  <option value="bacchucaucodi"
-                                      {{ $member->relationship == 'bacchucaucodi' ? 'selected' : '' }}>
-                                      Bác ruột, chú ruột, cậu ruột, cô ruột, dì ruột, chắt ruột
-                                  </option>
-                                  <option value="nguoigiamho"
-                                      {{ $member->relationship == 'nguoigiamho' ? 'selected' : '' }}>
-                                      Người giám hộ
-                                  </option>
-                                  <option value="nguoionho"
-                                      {{ $member->relationship == 'nguoionho' ? 'selected' : '' }}>
-                                      Người ở nhờ; ở mượn; ở thuê
-                                  </option>
-                                  <option value="nguoicungonho"
-                                      {{ $member->relationship == 'nguoicungonho' ? 'selected' : '' }}>
-                                      Người cùng ở nhờ; cùng ở thuê; cùng ở mượn.
-                                  </option>
-                              </select>
-                          </td>
-                          <td>
-                              <select name="isOwner[]" class="form-control">
-                                  <option value="1" {{ $member->isOwner == 1 ? 'selected' : '' }}>Yes</option>
-                                  <option value="0" {{ $member->isOwner == 0 ? 'selected' : '' }}>No</option>
-                              </select>
-                          </td>
-                          <td>
-                              @if ($member->isOwner)
-                              <button type="button" name="add" id="add" class="btn btn-success">Add</button>
-                              @else
-                              <button type="button" name="remove" class="btn btn-danger remove">Remove</button>
-                              @endif
-                          </td>
-                      </tr>
-                      @endforeach
+                        <td>
+                            <select name="personId[]" class="form-control" required>
+                                <option value="">Chọn nhân khẩu</option>
+                                @foreach ($people as $person)
+                                <option value="{{$person->id}}" {{ $person->id == $member->personId ? 'selected' : '' }}>
+                                  {{$person->id.' '.$person->name}}
+                                </option>
+                                @endforeach
+                            </select>
+                        </td>
+                        <td>
+                            <select name="relationship[]" class="form-control" required>
+                                <option value="Chủ hộ" {{ $member->relationship == 'Chủ hộ' ? 'selected' : '' }}>Chủ hộ</option>
+                                <option value="Vợ (chồng)" {{ $member->relationship == 'Vợ (chồng)' ? 'selected' : '' }}>Vợ (chồng)</option>
+                                <option value="Cha đẻ, mẹ đẻ" {{ $member->relationship == 'Cha đẻ, mẹ đẻ' ? 'selected' : '' }}>Cha đẻ, mẹ đẻ</option>
+                                <option value="Cha nuôi, mẹ nuôi" {{ $member->relationship == 'Cha nuôi, mẹ nuôi' ? 'selected' : '' }}>Cha nuôi, mẹ nuôi</option>
+                                <option value="Con đẻ" {{ $member->relationship == 'Con đẻ' ? 'selected' : '' }}>Con đẻ</option>
+                                <option value="Con nuôi" {{ $member->relationship == 'Con nuôi' ? 'selected' : '' }}>Con nuôi</option>
+                                <option value="Ông nội, bà nội" {{ $member->relationship == 'Ông nội, bà nội' ? 'selected' : '' }}>Ông nội, bà nội</option>
+                                <option value="Ông ngoại, bà ngoại" {{ $member->relationship == 'Ông ngoại, bà ngoại' ? 'selected' : '' }}>Ông ngoại, bà ngoại</option>
+                                <option value="Anh ruột; chị ruột; em ruột; cháu ruột" {{ $member->relationship == 'Anh ruột; chị ruột; em ruột; cháu ruột' ? 'selected' : '' }}>Anh ruột; chị ruột; em ruột; cháu ruột</option>
+                                <option value="Cụ nội, cụ ngoại" {{ $member->relationship == 'Cụ nội, cụ ngoại' ? 'selected' : '' }}>Cụ nội, cụ ngoại</option>
+                                <option value="Bác ruột, chú ruột, cậu ruột, cô ruột, dì ruột, chắt ruột" {{ $member->relationship == 'Bác ruột, chú ruột, cậu ruột, cô ruột, dì ruột, chắt ruột' ? 'selected' : '' }}>Bác ruột, chú ruột, cậu ruột, cô ruột, dì ruột, chắt ruột</option>
+                                <option value="Người giám hộ" {{ $member->relationship == 'Người giám hộ' ? 'selected' : '' }}>Người giám hộ</option>
+                                <option value="Người ở nhờ; ở mượn; ở thuê" {{ $member->relationship == 'Người ở nhờ; ở mượn; ở thuê' ? 'selected' : '' }}>Người ở nhờ; ở mượn; ở thuê</option>
+                                <option value="Người cùng ở nhờ; cùng ở thuê; cùng ở mượn" {{ $member->relationship == 'Người cùng ở nhờ; cùng ở thuê; cùng ở mượn' ? 'selected' : '' }}>Người cùng ở nhờ; cùng ở thuê; cùng ở mượn</option>
+                            </select>                            
+                        </td>
+                        <td>
+                            <select name="isOwner[]" class="form-control">
+                                <option value="1" {{ $member->isOwner == 1 ? 'selected' : '' }}>Đúng</option>
+                                <option value="0" {{ $member->isOwner == 0 ? 'selected' : '' }}>Sai</option>
+                            </select>
+                        </td>
+                        <td>
+                            @if ($member->isOwner)
+                            <button type="button" name="add" id="add" class="btn btn-success">Thêm</button>
+                            @else
+                            <button type="button" name="remove" class="btn btn-danger remove">Bỏ</button>
+                            @endif
+                        </td>
+                    </tr>
+                    @endforeach
                       @else
                       <tr>
                         <td>
                           <select name="personId[]" class="form-control" required>
                             <option value="">Chọn nhân khẩu</option>
                             @foreach ($people as $person)
-                            <option value="{{$person->id}}">{{$person->id}}</option>
+                            <option value="{{$person->id}}">{{$person->id.' '.$person->name}}</option>
                             @endforeach
                           </select>
                         </td>
                         <td>
-                          <select name="relationship[]" class="form-control" required>
-                            <option value="chuho">Chủ hộ</option>
-                            <option value="vochong">Vợ (chồng)</option>
-                            <option value="chamede">Cha đẻ, mẹ đẻ</option>
-                            <option value="chamenuoi">Cha nuôi, mẹ nuôi</option>
-                            <option value="conde">Con đẻ</option>
-                            <option value="connuoi">Con nuôi</option>
-                            <option value="ongba">Ông nội, bà nội</option>
-                            <option value="ongba">Ông ngoại, bà ngoại</option>
-                            <option value="anhchiem">Anh ruột; chị ruột; em ruột; cháu ruột</option>
-                            <option value="cu">Cụ nội, cụ ngoại</option>
-                            <option value="bacchucaucodi">Bác ruột, chú ruột, cậu ruột, cô ruột, dì ruột, chắt ruột</option>
-                            <option value="nguoigiamho">Người giám hộ</option>
-                            <option value="nguoionho">Người ở nhờ; ở mượn; ở thuê</option>
-                            <option value="nguoicungonho">Người cùng ở nhờ; cùng ở thuê; cùng ở mượn.</option>
-                          </select>
+                            <select name="relationship[]" class="form-control" required>
+                                <option value="Chủ hộ">Chủ hộ</option>
+                                <option value="Vợ (chồng)">Vợ (chồng)</option>
+                                <option value="Cha đẻ, mẹ đ">Cha đẻ, mẹ đẻ</option>
+                                <option value="Cha nuôi, mẹ nuôi">Cha nuôi, mẹ nuôi</option>
+                                <option value="Con đẻ">Con đẻ</option>
+                                <option value="Con nuôi">Con nuôi</option>
+                                <option value="Ông nội, bà nội">Ông nội, bà nội</option>
+                                <option value="Ông ngoại, bà ngoại">Ông ngoại, bà ngoại</option>
+                                <option value="Anh ruột; chị ruột; em ruột; cháu ruột">Anh ruột; chị ruột; em ruột; cháu ruột</option>
+                                <option value="Cụ nội, cụ ngoại">Cụ nội, cụ ngoại</option>
+                                <option value="Bác ruột, chú ruột, cậu ruột, cô ruột, dì ruột, chắt ruột">Bác ruột, chú ruột, cậu ruột, cô ruột, dì ruột, chắt ruột</option>
+                                <option value="Người giám hộ">Người giám hộ</option>
+                                <option value="Người ở nhờ; ở mượn; ở thuê">Người ở nhờ; ở mượn; ở thuê</option>
+                                <option value="Người cùng ở nhờ; cùng ở thuê; cùng ở mượn">Người cùng ở nhờ; cùng ở thuê; cùng ở mượn</option>
+                              </select>
                         </td>
                         <td>
                           <select name="isOwner[]" class="form-control">
-                            <option value="1">Yes</option>
-                            <option value="0">No</option>
+                            <option value="1">Đúng</option>
+                            <option value="0">Sai</option>
                         </td>
                         <td>
-                          <button type="button" name="add" id="add" class="btn btn-success">Add</button>
+                            <button type="button" name="add" id="add" class="btn btn-success">Thêm</button>
                         </td>
                       </tr>
                       @endif
@@ -186,33 +151,32 @@
         <select name="personId[]" class="form-control">
             <option value="">Chọn đi</option>
             @foreach ($people as $person)
-            <option value="{{$person->id}}">{{$person->id}}</option>
+            <option value="{{$person->id}}">{{$person->id.' '.$person->name}}</option>
             @endforeach
         </select>
     </td>
     <td>
-        <select name="relationship[]" class="form-control">
-            <option value="">Quan hệ với chủ hộ</option>
-            <option value="chuho">Chủ hộ</option>
-            <option value="vochong">Vợ (chồng)</option>
-            <option value="chamede">Cha đẻ, mẹ đẻ</option>
-            <option value="chamenuoi">Cha nuôi, mẹ nuôi</option>
-            <option value="conde">Con đẻ</option>
-            <option value="connuoi">Con nuôi</option>
-            <option value="ongba">Ông nội, bà nội</option>
-            <option value="ongba">Ông ngoại, bà ngoại</option>
-            <option value="anhchiem">Anh ruột; chị ruột; em ruột; cháu ruột</option>
-            <option value="cu">Cụ nội, cụ ngoại</option>
-            <option value="bacchucaucodi">Bác ruột, chú ruột, cậu ruột, cô ruột, dì ruột, chắt ruột</option>
-            <option value="nguoigiamho">Người giám hộ</option>
-            <option value="nguoionho">Người ở nhờ; ở mượn; ở thuê</option>
-            <option value="nguoicungonho">Người cùng ở nhờ; cùng ở thuê; cùng ở mượn.</option>
-        </select>
+        <select name="relationship[]" class="form-control" required>
+                    <option value="Chủ hộ">Chủ hộ</option>
+                    <option value="Vợ (chồng)">Vợ (chồng)</option>
+                    <option value="Cha đẻ, mẹ đ">Cha đẻ, mẹ đẻ</option>
+                    <option value="Cha nuôi, mẹ nuôi">Cha nuôi, mẹ nuôi</option>
+                    <option value="Con đẻ">Con đẻ</option>
+                    <option value="Con nuôi">Con nuôi</option>
+                    <option value="Ông nội, bà nội">Ông nội, bà nội</option>
+                    <option value="Ông ngoại, bà ngoại">Ông ngoại, bà ngoại</option>
+                    <option value="Anh ruột; chị ruột; em ruột; cháu ruột">Anh ruột; chị ruột; em ruột; cháu ruột</option>
+                    <option value="Cụ nội, cụ ngoại">Cụ nội, cụ ngoại</option>
+                    <option value="Bác ruột, chú ruột, cậu ruột, cô ruột, dì ruột, chắt ruột">Bác ruột, chú ruột, cậu ruột, cô ruột, dì ruột, chắt ruột</option>
+                    <option value="Người giám hộ">Người giám hộ</option>
+                    <option value="Người ở nhờ; ở mượn; ở thuê">Người ở nhờ; ở mượn; ở thuê</option>
+                    <option value="Người cùng ở nhờ; cùng ở thuê; cùng ở mượn">Người cùng ở nhờ; cùng ở thuê; cùng ở mượn</option>
+                  </select>
     </td>
     <td>
         <select name="isOwner[]" class="form-control">
-            <option value="0">No</option>
-            <option value="1">Yes</option>
+            <option value="0">Sai</option>
+            <option value="1">Đúng</option>
         </select>
     </td>
     <td>

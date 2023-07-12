@@ -47,10 +47,11 @@ class ReceiptController extends Controller
 
     public function edit($receipt)
     {
-        if (!$receipt = Receipt::findOrFail($receipt)) {
-            abort(404);
-        }
-        return view('admin.receipt.edit', compact('receipt'));
+        $receipt = Receipt::findOrFail($receipt);
+        $people = Person::all();
+        $households = Household::all();
+        $fees = Fee::all();
+        return view('admin.receipt.edit', compact('people', 'households', 'fees', 'receipt'));
     }
     
     public function update($receipt, ReceiptFormRequest $request)
@@ -76,4 +77,5 @@ class ReceiptController extends Controller
 
         return redirect()->back()->with('success','This receipt was deleted successfully');
     }
+
 }

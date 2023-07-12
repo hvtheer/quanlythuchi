@@ -7,7 +7,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-6">
-              <p><strong>ID khoản thu:</strong> {{ $fee->id }}</p>
+              <p><strong>Mã khoản thu:</strong> {{ $fee->id }}</p>
               <p><strong>Tên khoản thu:</strong> {{ $fee->name }}</p>
               <p><strong>Loại hình:</strong> {{ $fee->type == 'mandatory' ? 'Bắt buộc':'Tự nguyện' }}</p>
               <p><strong>Tổng số tiền đã thu:</strong> {{ $fee->receipts->sum('amount') }} VNĐ</p>
@@ -29,20 +29,12 @@
             <table class="table table-bordered" id="banner-dataTable" width="100%" cellspacing="0">
               <thead>
                 <tr>
-                  <th>ID</th>
+                  <th>Mã hộ khẩu</th>
                   <th>Chủ hộ</th>
                   <th>Địa chỉ</th>
                   <th>Số thành viên</th>
                 </tr>
               </thead>
-              <tfoot>
-                <tr>
-                  <th>ID</th>
-                  <th>Chủ hộ</th>
-                  <th>Địa chỉ</th>
-                  <th>Số thành viên</th>
-                </tr>
-              </tfoot>
               <tbody>
                 @foreach($fee->receipts as $receipt)
                     @if($receipt->household)
@@ -63,7 +55,7 @@
               </tbody>
             </table>
             @else
-              <h6 class="text-center">Không tìm thấy hộ khẩu nào. Xin hãy thêm hộ khẩu!</h6>
+              <h6 class="text-center">Không tìm thấy hộ khẩu nào!</h6>
             @endif
         </div>
     </div>

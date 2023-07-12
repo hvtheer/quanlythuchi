@@ -18,33 +18,18 @@
         <table class="table table-bordered" id="banner-dataTable" width="100%" cellspacing="0">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Ảnh đại diện</th>
+              <th>Mã quản lý</th>
               <th>Họ và tên</th>
               <th>Email</th>
-              <th>ID nhân khẩu</th>
+              <th>Mã nhân khẩu</th>
               <th>Trạng thái</th>
               <th>Hành động</th>
             </tr>
           </thead>
-          <tfoot>
-            <tr>
-              <th>ID</th>
-              <th>Ảnh đại diện</th>
-              <th>Họ và tên</th>
-              <th>Email</th>
-              <th>ID nhân khẩu</th>
-              <th>Trạng thái</th>
-              <th>Hành động</th>
-            </tr>
-          </tfoot>
           <tbody>
             @foreach($users as $user)   
                 <tr>
                   <td>{{$user->id}}</td>
-                  <td>
-                    <img src="{{ asset($user->avatar) }}" style="width: 40px; height: 40px" alt="Avatar" >
-                  </td>
                   <td>{{$user->name}}</td>
                   <td>{{$user->email}}</td>
                   <td>{{$user->personId}}</td>

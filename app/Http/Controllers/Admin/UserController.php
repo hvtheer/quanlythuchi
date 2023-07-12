@@ -29,7 +29,7 @@ class UserController extends Controller
 
     public function create()
     {
-        $people = Person::whereNotIn('id', User::pluck('personID'))->get();
+        $people = Person::all();
         return view('admin.user.create', compact('people'));
     }
 
@@ -55,10 +55,10 @@ class UserController extends Controller
 
     public function edit($user)
     {
-        if (!$user = User::findOrFail($user)) {
-            abort(404);
-        }
-        return view('admin.user.edit', compact('user'));
+        $user = User::findOrFail($user);
+        $people = Person::all();     
+        
+        return view('admin.user.edit', compact('user', 'people'));
     }
     
     public function update($user, UserFormRequest $request)

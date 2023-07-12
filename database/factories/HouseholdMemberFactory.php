@@ -11,17 +11,30 @@ class HouseholdMemberFactory extends Factory
 
     public function definition()
     {
-        $relationship = $this->faker->randomElement(['Bố', 'Mẹ', 'Con trai', 'Con gái']);
+        $relationship = $this->faker->randomElement([
+            'Chủ hộ',
+            'Vợ (chồng)',
+            'Cha đẻ, mẹ đẻ',
+            'Cha nuôi, mẹ nuôi',
+            'Con đẻ',
+            'Con nuôi',
+            'Ông nội, bà nội',
+            'Ông ngoại, bà ngoại',
+            'Anh ruột; chị ruột; em ruột; cháu ruột',
+            'Cụ nội, cụ ngoại',
+            'Bác ruột, chú ruột, cậu ruột, cô ruột, dì ruột, chắt ruột',
+            'Người giám hộ',
+            'Người ở nhờ; ở mượn; ở thuê',
+            'Người cùng ở nhờ; cùng ở thuê; cùng ở mượn'
+        ]);
         $isOwner = $this->faker->boolean;
-        $householdId = \App\Models\Household::factory()->create()->id;
+        $householdId = \App\Models\Household::inRandomOrder()->first()->id;
 
         return [
-            'personId' => function () {
-                return \App\Models\Person::factory()->create()->id;
-            },
+            'personId' => \App\Models\Person::inRandomOrder()->first()->id,
             'householdId' => $householdId,
             'relationship' => $relationship,
-            'isOwner' => $isOwner ? $householdId : false,
+            'isOwner' => $isOwner ? true : false,
         ];
     }
 }

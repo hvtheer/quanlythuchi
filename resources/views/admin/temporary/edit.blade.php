@@ -13,11 +13,19 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <label>Người làm đơn<span class="text-danger">*</span></label>
-                    <input type="text" name="personId" placeholder="Họ tên đệm" value="{{ $temporary->personId }}" class="form-control">
+                    <select name="personId" class="form-control" required>
+                      <option value="">Chọn mã nhân khẩu</option>
+                      @foreach ($people as $person)
+                      <option value="{{ $person->id }}" {{ $temporary->personId == $person->id ? 'selected' : '' }}>
+                        {{ $person->id . ' ' . $person->name }}
+                      </option>
+                      @endforeach
+                    </select>
                     @error('personId')
                     <span class="text-danger">{{ $message }}</span>
                     @enderror
-                </div>
+                  </div>
+                  
 
                 <div class="form-group col-md-6">
                     <label>Loại hình</label><span class="text-danger">*</span></label>

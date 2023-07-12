@@ -140,7 +140,10 @@
                 <?php
                   $receiptAmountSum = $fee->receipts->sum('amount');
                   if ($fee->receipts->count('householdId')) {
-                    $progress = $receiptAmountSum / ($fee->amount * $households->count());
+                    $progress = $receiptAmountSum / ($fee->amount * $households->sum(function ($household) {
+    return $household->members->count('personId');
+}));
+
                   } else {
                     $progress = 0;
                   }

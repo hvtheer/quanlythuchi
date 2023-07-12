@@ -11,13 +11,26 @@
             @csrf
             @method('PUT')
             <div class="row">
-                <div class="form-group col-md-6">
-                    <label>ID nhân khẩu<span class="text-danger">*</span></label>
+                {{-- <div class="form-group col-md-6">
+                    <label>Mã nhân khẩu<span class="text-danger">*</span></label>
                     <input type="text" name="personId" placeholder="Tên" value="{{ $user->personId }}" class="form-control">
                     @error('personId')
                     <span class="text-danger">{{ $message }}</span>
                     @enderror
-                </div>
+                </div> --}}
+
+                <div class="form-group col-md-6">
+                    <label>Mã nhân khẩu<span class="text-danger">*</span></label>
+                    <select name="personId" class="form-control" required>
+                      <option value="">Chọn mã nhân khẩu</option>
+                      @foreach ($people as $person)
+                      <option value="{{$person->id}}" {{ $user->personId == $person->id ? 'selected' : '' }}>{{$person->id}}</option>
+                      @endforeach
+                    </select>
+                    @error('personId')
+                    <span class="text-danger">{{$message}}</span>
+                    @enderror
+                </div>  
 
                 <div class="form-group col-md-6">
                     <label>Trạng thái<span class="text-danger">*</span></label>

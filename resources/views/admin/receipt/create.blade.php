@@ -23,7 +23,7 @@
             @enderror
           </div>
   
-          <div class="form-group col-md-6">
+          <div class="form-group col-md-6" id="householdGroup">
             <label>Nộp cho hộ<span class="text-danger">*</span></label>
             <select name="householdId" class="form-control">
               <option value="">Chọn số hộ khẩu</option>
@@ -35,13 +35,15 @@
             <span class="text-danger">{{$message}}</span>
             @enderror
           </div>
-
+          
           <div class="form-group col-md-6">
             <label>Khoản thu<span class="text-danger">*</span></label>
-            <select name="feeId" class="form-control" required>
+            <select name="feeId" id="typeSelect" class="form-control" required>
               <option value="">Chọn khoản thu</option>
               @foreach ($fees as $fee)
-              <option value="{{$fee->id}}">{{$fee->name}}</option>
+              <option value="{{ $fee->id }}" data-type="{{ $fee->type }}">
+                {{ $fee->name }}
+              </option>
               @endforeach
             </select>            
             @error('feeId')
@@ -75,3 +77,22 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+  // Hide or show "personId" field based on the selected "type"
+  const typeSelect = document.getElementById('typeSelect');
+  const personIdGroup = document.getElementById('householdGroup');
+
+  typeSelect.addEventListener('change', function() {
+    const selectedOption = typeSelect.options[typeSelect.selectedIndex];
+    const selectedType = selectedOption.getAttribute('data-type');
+
+    if (selectedType === 'mandatory') {
+      personIdGroup.style.display = 'block';
+    } else {
+      personIdGroup.style.display = 'none';
+    }
+  });
+</script>
+@endpush

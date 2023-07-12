@@ -70,6 +70,72 @@
             <div class="form-group col-md-12">
                 <a href="{{url('admin/household/'.$household->id.'/edit')}}" class="btn btn-primary">Sửa thông tin</a>
               </div>
+              <div class="col-md-12">
+                <h5>Các khoản thu đã nộp</h5>
+            </div>
+              @if($household->receipts->count('feeId')>0)
+              <table class="table table-bordered" id="banner-dataTable" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Khoản thu</th>
+                    <th>Người thu</th>
+                    <th>Số tiền</th>
+                    <th>Ghi chú</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach($household->receipts as $receipt)   
+                      <tr>
+                        <td>{{$receipt->fee->id}}</td>
+                        <td>{{$receipt->fee->name}}</td>
+                        <td>{{$receipt->user->name}}</td>
+                        <td>{{$receipt->amount}}</td>
+                        <td>{{$receipt->note}}</td>
+                      </tr>  
+                  @endforeach
+                </tbody>
+              </table>
+              @else
+                <h6 class="text-center">Không tìm thấy phiếu thu nào. Xin hãy thêm phiếu thu!</h6>
+              @endif
+ <!-- Add the following code to retrieve mandatory fees not yet paid -->
+@php
+$mandatoryFeesNotPaid = App\Models\Fee::whereNotIn('id', $household->receipts->pluck('feeId')->toArray())
+                              ->where('type', 'mandatory')
+                              ->get();
+@endphp
+
+<!-- Update the code for the "Các khoản bắt buộc chưa nộp" section -->
+<div class="col-md-12">
+<h5>Các khoản bắt buộc chưa nộp</h5>
+</div>
+@if($mandatoryFeesNotPaid->count() > 0)
+<table class="table table-bordered" id="mandatory-fees-table" width="100%" cellspacing="0">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Khoản thu</th>
+      <th>Số tiền</th>
+      <th>Nộp tiền</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach($mandatoryFeesNotPaid as $fee)
+      <tr>
+        <td>{{$fee->id}}</td>
+        <td>{{$fee->name}}</td>
+        <td>{{$fee->amount*$household->members()->count()}}</td>
+        <td><a href="{{ url('admin/receipt/create') }}" class="btn btn-primary btn-sm">Nộp tiền</a>
+        </td>
+      </tr>
+    @endforeach
+  </tbody>
+</table>
+@else
+<h6 class="text-center">Tất cả các khoản bắt buộc đã được nộp!</h6>
+@endif
+
         </div>
     </div>
 </div>
